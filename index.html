@@ -328,6 +328,10 @@
       line-height: 1.25;
     }
 
+  .subtitle-blank-line {
+   height: 1.25em;
+  }
+
   .section-subtitle-inline {
    display: inline-block;
    color: var(--muted);
@@ -335,20 +339,60 @@
    font-weight: 700;
    line-height: 1.2;
   }
- 
- .legal-disclaimer {
-   margin: 16px 0 0;
-   font-size: 12px;
-   line-height: 1.2;
-   color: #5c6f87;
-   text-align: justify;
-   word-break: break-word;
-   background: var(--surface, #ffffff);
-   border: 1px solid var(--border, #cddbea);
-   border-radius: var(--radius-xl, 22px);
-   box-shadow: var(--shadow, 0 16px 34px rgba(18, 44, 73, 0.10));
-   padding: 16px;
-  }
+  
+  /* Prescrições copiáveis — mesmo padrão visual do HVIso/HvNeo */
+  .prescription-content{position:relative;min-width:0}
+  .prescription-textarea{display:block;width:100%;max-width:none;min-height:165px;resize:vertical;margin:0;border:1px solid #bfd2e4;border-radius:14px;padding:14px 16px;background:#fcfeff;color:var(--text);line-height:1.5;font-family:inherit;font-size:.92rem;outline:none}
+  .prescription-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(15,111,198,.12)}
+  .prescription-actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+  .prescription-actions button{width:100%;min-width:0;min-height:44px;margin:0;padding:10px 12px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;font-size:.9rem}
+  .prescription-toast{position:fixed;left:50%;bottom:calc(max(16px,env(safe-area-inset-bottom)) + 62px);z-index:1800;max-width:min(340px,calc(100vw - 32px));padding:8px 12px;border:1px solid #cbdbea;border-radius:999px;background:rgba(255,255,255,.98);color:#173a6d;box-shadow:0 10px 28px rgba(15,23,42,.18);font-size:.8rem;font-weight:700;text-align:center;opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,8px);transition:opacity .18s ease,transform .18s ease,visibility .18s ease}
+  .prescription-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+  .prescription-note{margin:0 0 10px;color:var(--muted);font-size:.82rem;line-height:1.4}
+  @media(max-width:560px){.prescription-textarea{min-height:180px;padding:13px 14px;font-size:.9rem}}
+
+  .legal-disclaimer{
+      margin-top:16px;
+      padding:0;
+      border:1px solid #e2e8f0;
+      border-radius:14px;
+      background:#f8fafc;
+      box-shadow:none;
+      color:#64748b;
+      font-size:.76rem;
+      line-height:1.45;
+      text-align:left;
+      overflow:hidden;
+    }
+    .legal-disclaimer > summary{
+      list-style:none;
+      cursor:pointer;
+      position:relative;
+      padding:11px 38px 11px 13px;
+      color:#5c6f87;
+      font-size:.78rem;
+      font-weight:700;
+      user-select:none;
+    }
+    .legal-disclaimer > summary::-webkit-details-marker{display:none}
+    .legal-disclaimer > summary::after{
+      content:'＋';
+      position:absolute;
+      right:13px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#7b8da0;
+      font-size:.9rem;
+      font-weight:800;
+    }
+    .legal-disclaimer[open] > summary::after{content:'−'}
+    .legal-disclaimer-content{
+      padding:0 13px 12px;
+      border-top:1px solid #edf2f7;
+      padding-top:11px;
+      text-align:justify;
+      overflow-wrap:anywhere;
+    }
 
  .signature-block {
    text-align: center;
@@ -451,200 +495,65 @@
   <div class="grid" id="resultados" style="margin-top:16px; display:none;">
    <div class="card span-6">
     <h2 class="section-title">Fase de Expansão</h2>
-    <div class="kpi">
-     <div class="metric">
-      <div class="label">Volume total da expansão</div>
-      <div class="value" id="expTotal">–</div>
-     </div>
-     <div class="metric">
-      <div class="label">Tempo total da expansão</div>
-      <div class="value" id="expTempoTotal">–</div>
-     </div>
+    <div class="prescription-content">
+     <textarea id="expansionPrescriptionText" rows="10" class="prescription-textarea" readonly aria-label="Prescrição da fase de expansão"></textarea>
+     <div class="prescription-actions"><button type="button" class="secondary" id="expansionCopyPrescription">Copiar Prescrição</button></div>
+     <div class="prescription-toast" id="expansionCopyStatus" aria-live="polite" aria-atomic="true"></div>
     </div>
-    <table>
-     <thead>
-      <tr>
-       <th>Etapa</th>
-       <th>Solução</th>
-       <th>Volume</th>
-       <th>Tempo</th>
-       <th>Taxa</th>
-      </tr>
-     </thead>
-     <tbody>
-      <tr id="fase1Row">
-       <td>1ª fase</td>
-       <td>SF 0,9% ou Ringer Lactato</td>
-       <td id="fase1Vol">–</td>
-       <td id="fase1Tempo">–</td>
-       <td id="fase1Taxa">–</td>
-      </tr>
-      <tr id="fase2Row">
-       <td>2ª fase</td>
-       <td>SF 0,9% ou Ringer Lactato</td>
-       <td id="fase2Vol">–</td>
-       <td id="fase2Tempo">–</td>
-       <td id="fase2Taxa">–</td>
-      </tr>
-      <tr id="especialRow">
-       <td>Início cauteloso</td>
-       <td>SF 0,9% ou Ringer Lactato</td>
-       <td id="especialVol">–</td>
-       <td id="especialTempo">–</td>
-       <td id="especialTaxa">–</td>
-      </tr>
-     </tbody>
-    </table>
    </div>
-
    <div class="card span-6">
     <h2 class="section-title">Manutenção em 24 horas</h2>
+    <div class="subtitle-blank-line" aria-hidden="true"></div>
     <div class="section-subtitle">Volume base da fórmula de Holliday-Segar para a manutenção da hidratação.</div>
-    <div class="kpi">
-     <div class="metric">
-      <div class="label">Volume base de manutenção</div>
-      <div class="value" id="manutBase">–</div>
-     </div>
-     <div class="metric">
-      <div class="label">Taxa média final da manutenção</div>
-      <div class="value" id="manutTaxa">–</div>
-     </div>
+    <div class="prescription-content">
+     <textarea id="maintenancePrescriptionText" rows="8" class="prescription-textarea" readonly aria-label="Prescrição da manutenção em 24 horas"></textarea>
+     <div class="prescription-actions"><button type="button" class="secondary" id="maintenanceCopyPrescription">Copiar Prescrição</button></div>
+     <div class="prescription-toast" id="maintenanceCopyStatus" aria-live="polite" aria-atomic="true"></div>
     </div>
-    <table>
-     <thead>
-      <tr>
-       <th>Componente</th>
-       <th>Volume/24h</th>
-       <th>Observação</th>
-      </tr>
-     </thead>
-     <tbody>
-      <tr>
-       <td>SG 5%</td>
-       <td id="manutSG">–</td>
-       <td>Parte glicídica da solução 4:1</td>
-      </tr>
-      <tr>
-       <td>SF 0,9%</td>
-       <td id="manutSF">–</td>
-       <td>Parte salina da solução 4:1</td>
-      </tr>
-      <tr>
-       <td>KCl 10%</td>
-       <td id="manutKCl">–</td>
-       <td>2 mL para cada 100 mL da manutenção, apenas se houver diurese</td>
-      </tr>
-      <tr>
-       <td><strong>Total final da manutenção</strong></td>
-       <td id="manutTotal">–</td>
-       <td>Base da manutenção + volume do KCl</td>
-      </tr>
-     </tbody>
-    </table>
    </div>
-
    <div class="card span-6">
     <h2 class="section-title">Reposição inicial em 24 horas</h2>
+    <div class="subtitle-blank-line" aria-hidden="true"></div>
     <div class="section-subtitle">Infundir juntamente com a manutenção após a fase de expansão e manter até cessar as perdas pelas fezes líquidas.</div>
-    <div class="kpi">
-     <div class="metric">
-      <div class="label">Reposição inicial</div>
-      <div class="value" id="repoBase">–</div>
-     </div>
-     <div class="metric">
-      <div class="label">Taxa média</div>
-      <div class="value" id="repoTaxa">–</div>
-     </div>
+    <div class="prescription-content">
+     <textarea id="replacementPrescriptionText" rows="7" class="prescription-textarea" readonly aria-label="Prescrição da reposição inicial em 24 horas"></textarea>
+     <div class="prescription-actions"><button type="button" class="secondary" id="replacementCopyPrescription">Copiar Prescrição</button></div>
+     <div class="prescription-toast" id="replacementCopyStatus" aria-live="polite" aria-atomic="true"></div>
     </div>
-    <table>
-     <thead>
-      <tr>
-       <th>Componente</th>
-       <th>Volume/24h</th>
-       <th>Observação</th>
-      </tr>
-     </thead>
-     <tbody>
-      <tr>
-       <td>SG 5%</td>
-       <td id="repoSG">–</td>
-       <td>Metade da solução 1:1</td>
-      </tr>
-      <tr>
-       <td>SF 0,9%</td>
-       <td id="repoSF">–</td>
-       <td>Metade da solução 1:1</td>
-      </tr>
-      <tr>
-       <td><strong>Total da reposição</strong></td>
-       <td id="repoTotal">–</td>
-       <td>50 mL/kg/dia + perdas contínuas adicionais informadas</td>
-      </tr>
-     </tbody>
-    </table>
    </div>
-
    <div class="card span-6 card-minimizable is-minimized" id="cardComposicaoTotal">
-    <h2 class="section-title">Composição Total Prescricional nas Primeiras 24 horas.</h2>
+    <h2 class="section-title">Hidratação Diária Inicial sem o Volume de Expansão</h2>
     <div class="minimizable-body">
-        <div class="section-subtitle">Hidratação inicial nas primeiras 24h que inclui a Manutenção somado com a Reposição.</div>
-    <div class="kpi">
-     <div class="metric">
-      <div class="label">Total sem KCl</div>
-      <div class="value" id="globalTotal">–</div>
+     <div class="subtitle-blank-line" aria-hidden="true"></div>
+     <div class="section-subtitle">Soma da Manutenção em 24 horas com a Reposição inicial em 24 horas, sem incluir o volume da fase de expansão.</div>
+     <div class="prescription-content">
+      <textarea id="dailyInitialPrescriptionText" rows="8" class="prescription-textarea" readonly aria-label="Prescrição da hidratação diária inicial sem expansão"></textarea>
+      <div class="prescription-actions"><button type="button" class="secondary" id="dailyInitialCopyPrescription">Copiar Prescrição</button></div>
+      <div class="prescription-toast" id="dailyInitialCopyStatus" aria-live="polite" aria-atomic="true"></div>
      </div>
-     <div class="metric">
-      <div class="label">Taxa média global final</div>
-      <div class="value" id="globalTaxa">–</div>
-     </div>
-    </div>
-    <table>
-     <thead>
-      <tr>
-       <th>Componente</th>
-       <th>Volume/24h</th>
-      </tr>
-     </thead>
-     <tbody>
-      <tr>
-       <td>SG 5% total</td>
-       <td id="globalSG">–</td>
-      </tr>
-      <tr>
-       <td>SF 0,9% total</td>
-       <td id="globalSF">–</td>
-      </tr>
-      <tr>
-       <td>KCl 10%</td>
-       <td id="globalKCl">–</td>
-      </tr>
-      <tr>
-       <td><strong>Total final</strong></td>
-       <td id="globalFinal">–</td>
-      </tr>
-     </tbody>
-    </table>
     </div>
    </div>
 
-   <div class="card span-12">
+   <div class="card span-12 card-minimizable is-minimized" id="cardLeituraClinica">
     <h2 class="section-title">Leitura clínica do cálculo</h2>
+    <div class="minimizable-body" id="clinicalReadingBody">
     <div id="mensagens"></div>
     <div class="foot">
           <strong>Base do cálculo:</strong> Plano C do Ministério da Saúde para manejo do paciente com diarreia (expansão, manutenção e reposição).<br>
           <strong>Organização do cálculo:</strong> a expansão corresponde à fase inicial e é apresentada separadamente. A manutenção e a reposição são calculadas para o mesmo período de 24 horas: a manutenção estima a necessidade hídrica basal, enquanto a reposição acrescenta o volume destinado a déficit/perdas, compondo juntas a prescrição das 24 horas, com KCl apenas quando houver diurese estabelecida.<br>
           <strong>Importante:</strong> esta página é apoio de cálculo e não substitui reavaliação clínica, controle de diurese, eletrólitos, glicemia, balanço hídrico, nem adaptação para cenários especiais (sepse, choque de outra etiologia, hipernatremia, insuficiência renal, cetoacidose diabética, queimaduras, desnutrição grave etc.). Em pediatria hospitalar, o uso de KCl exige diurese estabelecida e monitorização laboratorial.
         </div>
+    </div>
    </div>
   </div>
-
-  <div class="legal-disclaimer">
-   <strong>Aviso Legal e Isenção de Responsabilidade:</strong><br>
-   Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.
-  
-  </div>
+    <details class="legal-disclaimer legal-disclaimer-collapsible">
+      <summary>Aviso Legal e Isenção de Responsabilidade</summary>
+      <div class="legal-disclaimer-content">
+        Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.
+      </div>
+    </details>
   <div class="spacer-1line" aria-hidden="true"></div>
-<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br>1.09.07.16</div>
+<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.09.09.13</span></div>
   <div class="spacer-3lines" aria-hidden="true"></div>
 </div>
 
@@ -661,6 +570,8 @@
     const MIN_WEIGHT_KG = 1;
     const MAX_WEIGHT_KG = 100;
     const MAX_EXTRA_LOSSES_24H = 2000;
+    const BOTTLE_STAGE_COUNTS = Object.freeze([1, 2, 3, 4, 6, 8, 12, 24]);
+    const MAX_BOTTLE_FINAL_VOLUME_ML = 500;
 
     function parseLocaleNumber(value) {
      if (typeof value !== 'string') return Number(value);
@@ -726,6 +637,12 @@
      if (weightKg <= 10) return weightKg * 100;
      if (weightKg <= 20) return 1000 + (weightKg - 10) * 50;
      return Math.min(1500 + (weightKg - 20) * 20, MAX_MANUTENCAO_24H);
+    }
+
+    function resolveBottleStageCount(totalFinalVolumeMl) {
+     const total = Number(totalFinalVolumeMl);
+     if (!Number.isFinite(total) || total <= 0) return 1;
+     return BOTTLE_STAGE_COUNTS.find((stageCount) => (total / stageCount) <= (MAX_BOTTLE_FINAL_VOLUME_ML + 1e-9)) || BOTTLE_STAGE_COUNTS[BOTTLE_STAGE_COUNTS.length - 1];
     }
 
     function validateInputs(inputs) {
@@ -936,13 +853,19 @@
      });
      expectClose('Cálculo usa peso mínimo normalizado 1 kg', result.expansion.totalVolume, 100);
 
-     return { passed: tests.length, total: tests.length };
+     expectClose('Frasco 500 mL usa 1 etapa', resolveBottleStageCount(500), 1);
+    expectClose('Frasco 501 mL usa 2 etapas', resolveBottleStageCount(501), 2);
+    expectClose('1.501 mL usa 4 etapas', resolveBottleStageCount(1501), 4);
+    expectClose('9.040 mL cabe em 24 etapas', resolveBottleStageCount(9040), 24);
+
+    return { passed: tests.length, total: tests.length };
     }
 
     return Object.freeze({
      parseLocaleNumber,
      normalizeInputs,
      calculateMaintenanceBase,
+     resolveBottleStageCount,
      validateInputs,
      calculatePlanC,
      runSelfTests
@@ -962,9 +885,10 @@
     resultados: document.getElementById('resultados'),
     mensagens: document.getElementById('mensagens'),
     alertBox: document.getElementById('alertBox'),
-    fase1Row: document.getElementById('fase1Row'),
-    fase2Row: document.getElementById('fase2Row'),
-    especialRow: document.getElementById('especialRow')
+    expansionPrescriptionText: document.getElementById('expansionPrescriptionText'),
+    maintenancePrescriptionText: document.getElementById('maintenancePrescriptionText'),
+    replacementPrescriptionText: document.getElementById('replacementPrescriptionText'),
+    dailyInitialPrescriptionText: document.getElementById('dailyInitialPrescriptionText')
    };
 
    // ==========================================================
@@ -1003,28 +927,14 @@
    // ==========================================================
    // ui renderers
    // ==========================================================
-   function setText(id, text) {
-    document.getElementById(id).textContent = text;
+   function formatIntervalHours(hours) {
+    if (!Number.isFinite(hours)) return '–';
+    return Number.isInteger(hours) ? String(hours) : formatNumber(hours, 1);
    }
 
-   function orderExpansionRows(inputs) {
-    if (!DOM.fase1Row || !DOM.fase2Row || !DOM.especialRow) return;
-    const tbody = DOM.fase1Row.parentNode || DOM.fase2Row.parentNode || DOM.especialRow.parentNode;
-    if (!tbody) return;
-
-    if (inputs.isSpecial) {
-     // Modo excludente: a expansão padrão 30 + 70 mL/kg desaparece.
-     DOM.fase1Row.style.display = 'none';
-     DOM.fase2Row.style.display = 'none';
-     DOM.especialRow.style.display = '';
-     tbody.insertBefore(DOM.especialRow, DOM.fase1Row);
-    } else {
-     // Modo padrão: mostrar 1ª fase e 2ª fase; ocultar início cauteloso.
-     DOM.fase1Row.style.display = '';
-     DOM.fase2Row.style.display = '';
-     DOM.especialRow.style.display = 'none';
-     tbody.appendChild(DOM.especialRow);
-    }
+   function formatHourDuration(hours) {
+    if (!Number.isFinite(hours)) return '–';
+    return formatIntervalHours(hours) + (hours === 1 ? ' hora' : ' horas');
    }
 
    function showAlert(message) {
@@ -1040,57 +950,57 @@
    function resetOutputs() {
     DOM.resultados.style.display = 'none';
     DOM.mensagens.innerHTML = '';
+    [DOM.expansionPrescriptionText, DOM.maintenancePrescriptionText, DOM.replacementPrescriptionText, DOM.dailyInitialPrescriptionText].forEach(function (textarea) { if (textarea) textarea.value = ''; });
     clearAlert();
     UI_STATE.lastResult = null;
    }
 
-   function renderExpansion(result, inputs) {
-    orderExpansionRows(inputs);
-    setText('expTotal', formatMl(result.expansion.totalVolume, 1));
-    setText('expTempoTotal', formatHours(result.expansion.totalHours));
-    setText('fase1Vol', formatMl(result.expansion.phase1Volume, 1));
-    setText('fase1Tempo', formatHours(result.expansion.phase1Hours));
-    setText('fase1Taxa', formatRate(result.expansion.phase1Rate, 1));
-    setText('fase2Vol', formatMl(result.expansion.phase2Volume, 1));
-    setText('fase2Tempo', formatHours(result.expansion.phase2Hours));
-    setText('fase2Taxa', formatRate(result.expansion.phase2Rate, 1));
-
+   function buildExpansionPrescription(result, inputs) {
+    const lines = [];
     if (inputs.isSpecial) {
-     setText('especialVol', formatMl(result.expansion.cautiousStartVolume, 1));
-     setText('especialTempo', formatHours(result.expansion.cautiousStartHours));
-     setText('especialTaxa', formatRate(result.expansion.cautiousStartRate, 1));
-    } else {
-     setText('especialVol', 'Não selecionado');
-     setText('especialTempo', '–');
-     setText('especialTaxa', '–');
+     lines.push('Início cauteloso');
+     lines.push('S.F. 0,9% ou Ringer Lactato - ' + formatNumber(result.expansion.cautiousStartVolume, 1) + ' mL');
+     lines.push('Infundir em ' + formatHourDuration(result.expansion.cautiousStartHours) + ' (' + formatNumber(result.expansion.cautiousStartRate, 1) + ' mL/hora)');
+     lines.push('');
+     lines.push('Volume Total = ' + formatNumber(result.expansion.totalVolume, 2) + ' mL');
+     lines.push('Reavaliar e repetir 10 mL/kg conforme avaliação médica até totalizar o recomendado da fase de expansão.');
+     return lines.join('\n');
     }
+    lines.push('1ª fase');
+    lines.push('S.F. 0,9% ou Ringer Lactato - ' + formatNumber(result.expansion.phase1Volume, 1) + ' mL');
+    lines.push('Infundir em ' + formatHourDuration(result.expansion.phase1Hours) + ' (' + formatNumber(result.expansion.phase1Rate, 1) + ' mL/hora)');
+    lines.push('');
+    lines.push('2ª fase');
+    lines.push('S.F. 0,9% ou Ringer Lactato - ' + formatNumber(result.expansion.phase2Volume, 1) + ' mL');
+    lines.push('Infundir em ' + formatHourDuration(result.expansion.phase2Hours) + ' (' + formatNumber(result.expansion.phase2Rate, 1) + ' mL/hora)');
+    lines.push('');
+    lines.push('Volume Total = ' + formatNumber(result.expansion.totalVolume, 2) + ' mL');
+    lines.push('Tempo Total = ' + formatHourDuration(result.expansion.totalHours));
+    return lines.join('\n');
    }
 
-   function renderMaintenance(result, inputs) {
-    setText('manutBase', formatMl(result.maintenance.base24h, 1));
-    setText('manutTaxa', formatRate(result.maintenance.ratePerHour, 1));
-    setText('manutSG', formatMl(result.maintenance.sg24h, 1));
-    setText('manutSF', formatMl(result.maintenance.sf24h, 1));
-    setText('manutKCl', inputs.hasDiuresis ? formatMl(result.maintenance.kcl24h, 1) : '0,0 mL');
-    setText('manutTotal', formatMl(result.maintenance.total24h, 1));
+   function buildFluidPrescription(options) {
+    const totalMl = Number(options.totalMl) || 0;
+    const stages = HydrationPlanCCore.resolveBottleStageCount(totalMl);
+    const intervalHours = 24 / stages;
+    const stageSgMl = (Number(options.sgMl) || 0) / stages;
+    const stageSfMl = (Number(options.sfMl) || 0) / stages;
+    const stageKclMl = (Number(options.kclMl) || 0) / stages;
+    const stageTotalMl = totalMl / stages;
+    const lines = [];
+    lines.push('S.G. 5% - ' + formatNumber(stageSgMl, 1) + ' mL');
+    lines.push('S.F. 0,9% - ' + formatNumber(stageSfMl, 1) + ' mL');
+    if (options.includeKcl !== false) lines.push('KCl 10% - ' + formatNumber(stageKclMl, 1) + ' mL');
+    lines.push('');
+    lines.push('Volume Total = ' + formatNumber(stageTotalMl, 2) + ' mL');
+    lines.push('Infundir a ' + formatNumber(Number(options.ratePerHour) || 0, 1) + ' mL/hora de ' + formatIntervalHours(intervalHours) + '/' + formatIntervalHours(intervalHours) + ' horas');
+    return lines.join('\n');
    }
 
-   function renderReplacement(result) {
-    setText('repoBase', formatMl(result.replacement.base24h, 1));
-    setText('repoTaxa', formatRate(result.replacement.ratePerHour, 1));
-    setText('repoSG', formatMl(result.replacement.sg24h, 1));
-    setText('repoSF', formatMl(result.replacement.sf24h, 1));
-    setText('repoTotal', formatMl(result.replacement.base24h, 1));
-   }
-
-   function renderTotals(result, inputs) {
-    setText('globalTotal', formatMl(result.totals.withoutKcl24h, 1));
-    setText('globalTaxa', formatRate(result.totals.ratePerHour, 1));
-    setText('globalSG', formatMl(result.totals.sg24h, 1));
-    setText('globalSF', formatMl(result.totals.sf24h, 1));
-    setText('globalKCl', inputs.hasDiuresis ? formatMl(result.totals.kcl24h, 1) : '0,0 mL');
-    setText('globalFinal', formatMl(result.totals.withKcl24h, 1));
-   }
+   function renderExpansion(result, inputs) { if (DOM.expansionPrescriptionText) DOM.expansionPrescriptionText.value = buildExpansionPrescription(result, inputs); }
+   function renderMaintenance(result, inputs) { if (DOM.maintenancePrescriptionText) DOM.maintenancePrescriptionText.value = buildFluidPrescription({sgMl:result.maintenance.sg24h,sfMl:result.maintenance.sf24h,kclMl:inputs.hasDiuresis?result.maintenance.kcl24h:0,totalMl:result.maintenance.total24h,ratePerHour:result.maintenance.ratePerHour,includeKcl:true}); }
+   function renderReplacement(result) { if (DOM.replacementPrescriptionText) DOM.replacementPrescriptionText.value = buildFluidPrescription({sgMl:result.replacement.sg24h,sfMl:result.replacement.sf24h,kclMl:0,totalMl:result.replacement.base24h,ratePerHour:result.replacement.ratePerHour,includeKcl:false}); }
+   function renderTotals(result, inputs) { if (DOM.dailyInitialPrescriptionText) DOM.dailyInitialPrescriptionText.value = buildFluidPrescription({sgMl:result.totals.sg24h,sfMl:result.totals.sf24h,kclMl:inputs.hasDiuresis?result.totals.kcl24h:0,totalMl:result.totals.withKcl24h,ratePerHour:result.totals.ratePerHour,includeKcl:true}); }
 
    function buildMessages(result, inputs) {
     const messages = [];
@@ -1262,28 +1172,38 @@ function readInputs() {
    }
 
 
+   function copyPrescriptionFallback(textarea) {
+    if (!textarea) return false; textarea.focus(); textarea.select(); let copied=false; try { copied=!!document.execCommand('copy'); } catch (_) {} return copied;
+   }
+   function bindPrescriptionCopy(buttonId, textareaId, statusId) {
+    const button=document.getElementById(buttonId), textarea=document.getElementById(textareaId), status=document.getElementById(statusId);
+    if (!button || !textarea || button.dataset.bound === 'true') return; button.dataset.bound='true'; let statusTimer=null;
+    function showStatus(message,duration){ if(!status)return; if(statusTimer)clearTimeout(statusTimer); status.textContent=message||''; status.classList.toggle('show',Boolean(message)); if(message){statusTimer=setTimeout(function(){status.classList.remove('show');setTimeout(function(){status.textContent='';},220);},duration||1800);}}
+    button.addEventListener('click',function(){const text=textarea.value||'';if(!text.trim()){showStatus('Aguardando cálculo.',1800);return;}if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){navigator.clipboard.writeText(text).then(function(){showStatus('✓ Copiado',1600);}).catch(function(){showStatus(copyPrescriptionFallback(textarea)?'✓ Copiado':'Selecione o texto e copie manualmente.',2600);});return;}showStatus(copyPrescriptionFallback(textarea)?'✓ Copiado':'Selecione o texto e copie manualmente.',2600);});
+   }
+
    function bindMinimizableCards() {
-    const cardComposicaoTotal = document.getElementById('cardComposicaoTotal');
-    if (!cardComposicaoTotal) return;
+    document.querySelectorAll('.card-minimizable').forEach(function (card) {
+     const title = card.querySelector('.section-title');
+     if (!title || title.dataset.minimizableBound === 'true') return;
 
-    const title = cardComposicaoTotal.querySelector('.section-title');
-    if (!title) return;
+     title.dataset.minimizableBound = 'true';
+     title.setAttribute('role', 'button');
+     title.setAttribute('tabindex', '0');
+     title.setAttribute('aria-expanded', String(!card.classList.contains('is-minimized')));
 
-    title.setAttribute('role', 'button');
-    title.setAttribute('tabindex', '0');
-    title.setAttribute('aria-expanded', String(!cardComposicaoTotal.classList.contains('is-minimized')));
-
-    function toggleCard() {
-     cardComposicaoTotal.classList.toggle('is-minimized');
-     title.setAttribute('aria-expanded', String(!cardComposicaoTotal.classList.contains('is-minimized')));
-    }
-
-    title.addEventListener('click', toggleCard);
-    title.addEventListener('keydown', function (event) {
-     if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      toggleCard();
+     function toggleCard() {
+      card.classList.toggle('is-minimized');
+      title.setAttribute('aria-expanded', String(!card.classList.contains('is-minimized')));
      }
+
+     title.addEventListener('click', toggleCard);
+     title.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter' || event.key === ' ') {
+       event.preventDefault();
+       toggleCard();
+      }
+     });
     });
    }
 
@@ -1294,6 +1214,10 @@ function readInputs() {
     DOM.btnLimpar.addEventListener('click', handleReset);
     bindAutoRecalculation();
     bindMinimizableCards();
+    bindPrescriptionCopy('expansionCopyPrescription', 'expansionPrescriptionText', 'expansionCopyStatus');
+    bindPrescriptionCopy('maintenanceCopyPrescription', 'maintenancePrescriptionText', 'maintenanceCopyStatus');
+    bindPrescriptionCopy('replacementCopyPrescription', 'replacementPrescriptionText', 'replacementCopyStatus');
+    bindPrescriptionCopy('dailyInitialCopyPrescription', 'dailyInitialPrescriptionText', 'dailyInitialCopyStatus');
     handleCalculate();
    }
 
