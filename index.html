@@ -1,5 +1,9 @@
 
 <!-- NomeDoApp = "Hidratação com Plano C" -->
+<!-- AndroidVersionName = "1.11.10.11" -->
+<!-- VersionName = "1.11.10.11" -->
+<!-- AndroidVersionCode = "262840821" -->
+<!-- VersionCode = "262840821" -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -107,6 +111,9 @@
    border-color: var(--accent);
    box-shadow: 0 0 0 4px rgba(15, 111, 198, 0.12);
   }
+
+  input[aria-invalid="true"], select[aria-invalid="true"] { border-color: var(--warn); }
+  .field-error { color: var(--warn); font-size: 0.82rem; line-height: 1.4; margin-top: 5px; }
 
   input[type="checkbox"] {
    width: auto;
@@ -342,14 +349,17 @@
   
   /* Prescrições copiáveis — mesmo padrão visual do HVIso/HvNeo */
   .prescription-content{position:relative;min-width:0}
-  .prescription-textarea{display:block;width:100%;max-width:none;min-height:165px;resize:vertical;margin:0;border:1px solid #bfd2e4;border-radius:14px;padding:14px 16px;background:#fcfeff;color:var(--text);line-height:1.5;font-family:inherit;font-size:.92rem;outline:none}
+  .prescription-card{background:linear-gradient(180deg,#fffdfa 0%,#fff8dd 100%)}
+  .prescription-textarea{display:block;width:100%;max-width:none;min-height:300px;resize:vertical;overflow-y:auto;margin:0;border:1px solid #bfd2e4;border-radius:14px;padding:14px 16px;background:linear-gradient(180deg,#fffdfa 0%,#fff8dd 100%);color:var(--text);line-height:1.5;font-family:inherit;font-size:.92rem;outline:none}
   .prescription-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(15,111,198,.12)}
+  input.is-recalculated,.prescription-textarea.is-recalculated{background:#bfdbfe}
+  .prescription-actions button:disabled{opacity:.5;cursor:default}
   .prescription-actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
   .prescription-actions button{width:100%;min-width:0;min-height:44px;margin:0;padding:10px 12px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;font-size:.9rem}
   .prescription-toast{position:fixed;left:50%;bottom:calc(max(16px,env(safe-area-inset-bottom)) + 62px);z-index:1800;max-width:min(340px,calc(100vw - 32px));padding:8px 12px;border:1px solid #cbdbea;border-radius:999px;background:rgba(255,255,255,.98);color:#173a6d;box-shadow:0 10px 28px rgba(15,23,42,.18);font-size:.8rem;font-weight:700;text-align:center;opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,8px);transition:opacity .18s ease,transform .18s ease,visibility .18s ease}
   .prescription-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
   .prescription-note{margin:0 0 10px;color:var(--muted);font-size:.82rem;line-height:1.4}
-  @media(max-width:560px){.prescription-textarea{min-height:180px;padding:13px 14px;font-size:.9rem}}
+  @media(max-width:560px){.prescription-textarea{min-height:320px;padding:13px 14px;font-size:.9rem}}
 
   .legal-disclaimer{
       margin-top:16px;
@@ -419,7 +429,7 @@
       content: "▸";
       float: right;
       font-size: 0.9rem;
-      color: #fff;
+      color: currentColor;
     }
 
     .card-minimizable:not(.is-minimized) .section-title::after {
@@ -459,18 +469,22 @@
    <div class="inputs">
     <div>
      <label for="peso">Peso (kg)</label>
-     <input type="number" step="0.001" min="1" max="100" id="peso" name="peso" value="6">
+     <input type="text" id="peso" name="peso" value="6,000" inputmode="numeric" enterkeyhint="next" maxlength="8" autocomplete="off" aria-describedby="pesoError" aria-invalid="false">
+     <div id="pesoError" class="field-error" role="alert" hidden></div>
     </div>
     <div>
      <label for="faixa">Faixa etária para a fase de expansão</label>
-     <select id="faixa">
+     <select id="faixa" aria-describedby="faixaError" aria-invalid="false">
+      <option value="" disabled hidden>Selecione</option>
       <option value="lt1" selected>Menor de 1 ano</option>
       <option value="ge1">1 ano ou mais</option>
      </select>
+     <div id="faixaError" class="field-error" role="alert" hidden></div>
     </div>
     <div>
      <label for="perdasExtras">Perdas contínuas adicionais (mL/24h)</label>
-     <input type="number" step="1" min="0" max="2000" id="perdasExtras" name="perdasExtras" value="0" autocomplete="off" placeholder="Ex.: 150">
+     <input type="text" id="perdasExtras" name="perdasExtras" value="0" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="Ex.: 150" aria-describedby="perdasExtrasError" aria-invalid="false">
+     <div id="perdasExtrasError" class="field-error" role="alert" hidden></div>
      <div class="small">Somadas manualmente à reposição inicial de 50 mL/kg/dia.</div>
     </div>
    </div>
@@ -493,7 +507,7 @@
   </div>
 
   <div class="grid" id="resultados" style="margin-top:16px; display:none;">
-   <div class="card span-6">
+   <div class="card span-6 prescription-card">
     <h2 class="section-title">Fase de Expansão</h2>
     <div class="prescription-content">
      <textarea id="expansionPrescriptionText" rows="10" class="prescription-textarea" readonly aria-label="Prescrição da fase de expansão"></textarea>
@@ -501,7 +515,7 @@
      <div class="prescription-toast" id="expansionCopyStatus" aria-live="polite" aria-atomic="true"></div>
     </div>
    </div>
-   <div class="card span-6">
+   <div class="card span-6 prescription-card">
     <h2 class="section-title">Manutenção em 24 horas</h2>
     <div class="subtitle-blank-line" aria-hidden="true"></div>
     <div class="section-subtitle">Volume base da fórmula de Holliday-Segar para a manutenção da hidratação.</div>
@@ -511,7 +525,7 @@
      <div class="prescription-toast" id="maintenanceCopyStatus" aria-live="polite" aria-atomic="true"></div>
     </div>
    </div>
-   <div class="card span-6">
+   <div class="card span-6 prescription-card">
     <h2 class="section-title">Reposição inicial em 24 horas</h2>
     <div class="subtitle-blank-line" aria-hidden="true"></div>
     <div class="section-subtitle">Infundir juntamente com a manutenção após a fase de expansão e manter até cessar as perdas pelas fezes líquidas.</div>
@@ -521,7 +535,7 @@
      <div class="prescription-toast" id="replacementCopyStatus" aria-live="polite" aria-atomic="true"></div>
     </div>
    </div>
-   <div class="card span-6 card-minimizable is-minimized" id="cardComposicaoTotal">
+   <div class="card span-6 prescription-card card-minimizable is-minimized" id="cardComposicaoTotal">
     <h2 class="section-title">Hidratação Diária Inicial sem o Volume de Expansão</h2>
     <div class="minimizable-body">
      <div class="subtitle-blank-line" aria-hidden="true"></div>
@@ -540,7 +554,17 @@
     <div id="mensagens"></div>
     <div class="foot">
           <strong>Base do cálculo:</strong> Plano C do Ministério da Saúde para manejo do paciente com diarreia (expansão, manutenção e reposição).<br>
-          <strong>Organização do cálculo:</strong> a expansão corresponde à fase inicial e é apresentada separadamente. A manutenção e a reposição são calculadas para o mesmo período de 24 horas: a manutenção estima a necessidade hídrica basal, enquanto a reposição acrescenta o volume destinado a déficit/perdas, compondo juntas a prescrição das 24 horas, com KCl apenas quando houver diurese estabelecida.<br>
+          <strong>Ordem de uso das prescrições:</strong>
+          <ol>
+            <li><strong>Primeiro: infundir a fase de expansão (etapa rápida).</strong> Administrar a 1ª fase e depois a 2ª fase, seguindo os volumes e tempos calculados. Quando selecionado o início cauteloso, seguir esse esquema com reavaliação antes de repetir os volumes.</li>
+            <li><strong>Depois: infundir manutenção e reposição no mesmo período de 24 horas.</strong> Usar as prescrições <strong>Manutenção em 24 horas</strong> e <strong>Reposição inicial em 24 horas</strong> juntas. O quadro <strong>Hidratação diária inicial sem o volume de expansão</strong> já reúne as duas e pode ser usado como alternativa à apresentação separada; não deve ser somado novamente a elas.</li>
+            <li><strong>No segundo dia de internação e nos seguintes, ao renovar a prescrição:</strong><br>
+              <strong>Se persistirem perdas e a indicação de hidratação venosa:</strong> reavaliar a manutenção e ajustar a reposição às perdas atuais, sem repetir automaticamente o volume inicial.<br>
+              <strong>Se as perdas tiverem cessado, mas ainda houver indicação de hidratação venosa:</strong> usar somente a manutenção, ajustada à necessidade atual.<br>
+              <strong>Se estiver reidratado e conseguir manter a hidratação com solução de sais de reidratação oral (SRO):</strong> suspender a hidratação venosa.<br>
+              A fase de expansão não é repetida automaticamente a cada novo dia; depende de nova indicação clínica.
+            </li>
+          </ol>
           <strong>Importante:</strong> esta página é apoio de cálculo e não substitui reavaliação clínica, controle de diurese, eletrólitos, glicemia, balanço hídrico, nem adaptação para cenários especiais (sepse, choque de outra etiologia, hipernatremia, insuficiência renal, cetoacidose diabética, queimaduras, desnutrição grave etc.). Em pediatria hospitalar, o uso de KCl exige diurese estabelecida e monitorização laboratorial.
         </div>
     </div>
@@ -877,8 +901,11 @@
    // ==========================================================
    const DOM = {
     peso: document.getElementById('peso'),
+    pesoError: document.getElementById('pesoError'),
     faixa: document.getElementById('faixa'),
+    faixaError: document.getElementById('faixaError'),
     perdasExtras: document.getElementById('perdasExtras'),
+    perdasExtrasError: document.getElementById('perdasExtrasError'),
     especial: document.getElementById('especial'),
     diurese: document.getElementById('diurese'),
     btnLimpar: document.getElementById('btnLimpar'),
@@ -896,8 +923,17 @@
    // ==========================================================
    const UI_STATE = {
     lastInputs: null,
-    lastResult: null
+    lastResult: null,
+    pendingFields: {},
+    replaceOnFirstEdit: {},
+    literalWeightInput: false,
+    revision: 0,
+    highlightTimers: {},
+    copyTimers: {},
+    copyClearTimers: {},
+    navigationTimer: null
    };
+   const PRESCRIPTION_PREFIXES = ['expansion', 'maintenance', 'replacement', 'dailyInitial'];
 
    // ==========================================================
    // formatters
@@ -947,12 +983,108 @@
     DOM.alertBox.style.display = 'none';
    }
 
+   function hasPendingInput() {
+    return Object.keys(UI_STATE.pendingFields).length > 0;
+   }
+
+   function refreshCopyButtons() {
+    PRESCRIPTION_PREFIXES.forEach(function (prefix) {
+     const button = document.getElementById(prefix + 'CopyPrescription');
+     const textarea = DOM[prefix + 'PrescriptionText'];
+     button.disabled = hasPendingInput() || !UI_STATE.lastResult || !textarea.value.trim();
+    });
+   }
+
+   function clearElementHighlight(element) {
+    if (!element) return;
+    if (UI_STATE.highlightTimers[element.id]) clearTimeout(UI_STATE.highlightTimers[element.id]);
+    delete UI_STATE.highlightTimers[element.id];
+    element.classList.remove('is-recalculated');
+   }
+
+   function highlightElement(element) {
+    clearElementHighlight(element);
+    element.classList.add('is-recalculated');
+    UI_STATE.highlightTimers[element.id] = setTimeout(function () {
+     element.classList.remove('is-recalculated');
+     delete UI_STATE.highlightTimers[element.id];
+    }, 1000);
+   }
+
+   function clearResultHighlights() {
+    PRESCRIPTION_PREFIXES.forEach(function (prefix) { clearElementHighlight(DOM[prefix + 'PrescriptionText']); });
+   }
+
+   function clearCopyFeedback() {
+    PRESCRIPTION_PREFIXES.forEach(function (prefix) {
+     const id = prefix + 'CopyStatus';
+     clearTimeout(UI_STATE.copyTimers[id]);
+     clearTimeout(UI_STATE.copyClearTimers[id]);
+     delete UI_STATE.copyTimers[id];
+     delete UI_STATE.copyClearTimers[id];
+     const status = document.getElementById(id);
+     status.textContent = '';
+     status.classList.remove('show');
+    });
+   }
+
+   function resizePrescriptionTextarea(textarea) {
+    if (!textarea || !textarea.offsetWidth) return;
+    textarea.style.height = 'auto';
+    const borderHeight = textarea.offsetHeight - textarea.clientHeight;
+    textarea.style.height = (textarea.scrollHeight + borderHeight) + 'px';
+   }
+
+   function resizePrescriptionTextareas() {
+    PRESCRIPTION_PREFIXES.forEach(function (prefix) { resizePrescriptionTextarea(DOM[prefix + 'PrescriptionText']); });
+   }
+
+   function setPrescription(prefix, text, highlight) {
+    const textarea = DOM[prefix + 'PrescriptionText'];
+    const changed = textarea.value !== text;
+    textarea.value = text;
+    resizePrescriptionTextarea(textarea);
+    if (highlight && changed) highlightElement(textarea);
+   }
+
+   function clearValidationErrors() {
+    ['peso', 'perdasExtras', 'faixa'].forEach(function (id) {
+     DOM[id].setAttribute('aria-invalid', 'false');
+     DOM[id + 'Error'].textContent = '';
+     DOM[id + 'Error'].hidden = true;
+    });
+    clearAlert();
+   }
+
+   function showValidationErrors(inputs) {
+    const errors = {};
+    if (!Number.isFinite(inputs.weightKg)) errors.peso = 'Informe um peso válido em kg.';
+    if (!Number.isFinite(inputs.extraLosses24h)) errors.perdasExtras = 'Informe perdas contínuas adicionais válidas.';
+    if (inputs.ageGroup !== 'lt1' && inputs.ageGroup !== 'ge1') errors.faixa = 'Selecione uma faixa etária válida.';
+    Object.keys(errors).forEach(function (id) {
+     DOM[id].setAttribute('aria-invalid', 'true');
+     DOM[id + 'Error'].textContent = errors[id];
+     DOM[id + 'Error'].hidden = false;
+    });
+    return Object.keys(errors)[0] || '';
+   }
+
+   function setCardExpanded(id, open) {
+    const card = document.getElementById(id);
+    card.classList.toggle('is-minimized', !open);
+    const title = card.querySelector('.section-title');
+    if (title) title.setAttribute('aria-expanded', String(open));
+   }
+
    function resetOutputs() {
     DOM.resultados.style.display = 'none';
     DOM.mensagens.innerHTML = '';
     [DOM.expansionPrescriptionText, DOM.maintenancePrescriptionText, DOM.replacementPrescriptionText, DOM.dailyInitialPrescriptionText].forEach(function (textarea) { if (textarea) textarea.value = ''; });
     clearAlert();
     UI_STATE.lastResult = null;
+    clearResultHighlights();
+    clearCopyFeedback();
+    refreshCopyButtons();
    }
 
    function buildExpansionPrescription(result, inputs) {
@@ -992,15 +1124,38 @@
     lines.push('S.F. 0,9% - ' + formatNumber(stageSfMl, 1) + ' mL');
     if (options.includeKcl !== false) lines.push('KCl 10% - ' + formatNumber(stageKclMl, 1) + ' mL');
     lines.push('');
-    lines.push('Volume Total = ' + formatNumber(stageTotalMl, 2) + ' mL');
+    lines.push('Volume em 24 h = ' + formatNumber(totalMl, 2) + ' mL');
+    lines.push('Volume por etapa = ' + formatNumber(stageTotalMl, 2) + ' mL');
+    lines.push('Etapas: ' + stages);
     lines.push('Infundir a ' + formatNumber(Number(options.ratePerHour) || 0, 1) + ' mL/hora de ' + formatIntervalHours(intervalHours) + '/' + formatIntervalHours(intervalHours) + ' horas');
     return lines.join('\n');
    }
 
-   function renderExpansion(result, inputs) { if (DOM.expansionPrescriptionText) DOM.expansionPrescriptionText.value = buildExpansionPrescription(result, inputs); }
-   function renderMaintenance(result, inputs) { if (DOM.maintenancePrescriptionText) DOM.maintenancePrescriptionText.value = buildFluidPrescription({sgMl:result.maintenance.sg24h,sfMl:result.maintenance.sf24h,kclMl:inputs.hasDiuresis?result.maintenance.kcl24h:0,totalMl:result.maintenance.total24h,ratePerHour:result.maintenance.ratePerHour,includeKcl:true}); }
-   function renderReplacement(result) { if (DOM.replacementPrescriptionText) DOM.replacementPrescriptionText.value = buildFluidPrescription({sgMl:result.replacement.sg24h,sfMl:result.replacement.sf24h,kclMl:0,totalMl:result.replacement.base24h,ratePerHour:result.replacement.ratePerHour,includeKcl:false}); }
-   function renderTotals(result, inputs) { if (DOM.dailyInitialPrescriptionText) DOM.dailyInitialPrescriptionText.value = buildFluidPrescription({sgMl:result.totals.sg24h,sfMl:result.totals.sf24h,kclMl:inputs.hasDiuresis?result.totals.kcl24h:0,totalMl:result.totals.withKcl24h,ratePerHour:result.totals.ratePerHour,includeKcl:true}); }
+   function prescriptionHeader(title, inputs, includeAge, includeDiuresis) {
+    const lines = [title, 'Peso: ' + formatNumber(inputs.weightKg, 3) + ' kg'];
+    if (includeAge) lines.push('Faixa etária: ' + (inputs.ageGroup === 'lt1' ? 'Menor de 1 ano' : '1 ano ou mais'));
+    if (includeDiuresis) lines.push('Diurese estabelecida: ' + (inputs.hasDiuresis ? 'Sim' : 'Não'));
+    return lines.join('\n') + '\n\n';
+   }
+
+   function renderExpansion(result, inputs, highlight) {
+    setPrescription('expansion', prescriptionHeader('Fase de expansão', inputs, true, false) + buildExpansionPrescription(result, inputs), highlight);
+   }
+
+   function renderMaintenance(result, inputs, highlight) {
+    const text = buildFluidPrescription({sgMl:result.maintenance.sg24h,sfMl:result.maintenance.sf24h,kclMl:inputs.hasDiuresis?result.maintenance.kcl24h:0,totalMl:result.maintenance.total24h,ratePerHour:result.maintenance.ratePerHour,includeKcl:true});
+    setPrescription('maintenance', prescriptionHeader('Manutenção em 24 horas', inputs, false, true) + text, highlight);
+   }
+
+   function renderReplacement(result, inputs, highlight) {
+    const text = buildFluidPrescription({sgMl:result.replacement.sg24h,sfMl:result.replacement.sf24h,kclMl:0,totalMl:result.replacement.base24h,ratePerHour:result.replacement.ratePerHour,includeKcl:false});
+    setPrescription('replacement', prescriptionHeader('Reposição inicial em 24 horas', inputs, false, false) + text, highlight);
+   }
+
+   function renderTotals(result, inputs, highlight) {
+    const text = buildFluidPrescription({sgMl:result.totals.sg24h,sfMl:result.totals.sf24h,kclMl:inputs.hasDiuresis?result.totals.kcl24h:0,totalMl:result.totals.withKcl24h,ratePerHour:result.totals.ratePerHour,includeKcl:true});
+    setPrescription('dailyInitial', prescriptionHeader('Hidratação diária inicial sem o volume de expansão', inputs, false, true) + text, highlight);
+   }
 
    function buildMessages(result, inputs) {
     const messages = [];
@@ -1086,24 +1241,34 @@
     return messages.join('');
    }
 
-   function renderResults(result, inputs) {
-    renderExpansion(result, inputs);
-    renderMaintenance(result, inputs);
-    renderReplacement(result);
-    renderTotals(result, inputs);
-    DOM.mensagens.innerHTML = buildMessages(result, inputs);
+   function renderResults(result, inputs, highlight) {
     DOM.resultados.style.display = 'grid';
+    renderExpansion(result, inputs, highlight);
+    renderMaintenance(result, inputs, highlight);
+    renderReplacement(result, inputs, highlight);
+    renderTotals(result, inputs, highlight);
+    const messages = buildMessages(result, inputs);
+    DOM.mensagens.innerHTML = messages;
+    if (messages.includes('class="warning"')) setCardExpanded('cardLeituraClinica', true);
     UI_STATE.lastResult = result;
+    refreshCopyButtons();
    }
 
    // ==========================================================
    // parsers / validators
    // ==========================================================
-function formatWeightInputValue(value) {
+   function formatWeightInputValue(value) {
     if (!Number.isFinite(value)) return '';
-    return String(value);
+    return formatNumber(value, 3);
    }
-function readInputs() {
+
+   function updateNormalizedField(element, rawValue, value, formatted, highlight) {
+    if (!Number.isFinite(value)) return;
+    if (element.value !== formatted) element.value = formatted;
+    if (highlight && Number.isFinite(rawValue) && Math.abs(rawValue - value) > 1e-9) highlightElement(element);
+   }
+
+   function readInputs(highlight) {
     const rawInputs = {
      weightKg: HydrationPlanCCore.parseLocaleNumber(DOM.peso.value),
      ageGroup: DOM.faixa.value,
@@ -1114,13 +1279,8 @@ function readInputs() {
 
     const inputs = HydrationPlanCCore.normalizeInputs(rawInputs);
 
-    if (Number.isFinite(inputs.weightKg)) {
-     DOM.peso.value = formatWeightInputValue(inputs.weightKg);
-    }
-
-    if (Number.isFinite(inputs.extraLosses24h)) {
-     DOM.perdasExtras.value = String(inputs.extraLosses24h);
-    }
+    updateNormalizedField(DOM.peso, rawInputs.weightKg, inputs.weightKg, formatWeightInputValue(inputs.weightKg), highlight);
+    updateNormalizedField(DOM.perdasExtras, rawInputs.extraLosses24h, inputs.extraLosses24h, String(inputs.extraLosses24h), highlight);
 
     UI_STATE.lastInputs = inputs;
     return inputs;
@@ -1129,44 +1289,158 @@ function readInputs() {
    // ==========================================================
    // event handlers
    // ==========================================================
-   function handleCalculate() {
-    const inputs = readInputs();
+   function handleCalculate(options) {
+    options = options || {};
+    if (hasPendingInput()) return null;
+    clearValidationErrors();
+    const highlight = !options.initial;
+    const inputs = readInputs(highlight);
     const validationError = HydrationPlanCCore.validateInputs(inputs);
 
     if (validationError) {
      resetOutputs();
-     showAlert(validationError);
-     return;
+     if (!showValidationErrors(inputs)) showAlert(validationError);
+     return null;
     }
 
     clearAlert();
-    renderResults(HydrationPlanCCore.calculatePlanC(inputs), inputs);
+    const result = HydrationPlanCCore.calculatePlanC(inputs);
+    renderResults(result, inputs, highlight);
+    return result;
    }
 
    function handleReset() {
-    DOM.peso.value = '6';
-    DOM.faixa.value = 'lt1';
+    cancelResultNavigation();
+    UI_STATE.revision += 1;
+    UI_STATE.pendingFields = {};
+    UI_STATE.replaceOnFirstEdit = {};
+    UI_STATE.literalWeightInput = false;
+    Object.keys(UI_STATE.highlightTimers).forEach(function (id) { clearElementHighlight(document.getElementById(id)); });
+    DOM.peso.value = '';
+    DOM.faixa.value = '';
     DOM.perdasExtras.value = '0';
     DOM.especial.checked = false;
-    DOM.diurese.checked = true;
+    DOM.diurese.checked = false;
     UI_STATE.lastInputs = null;
-    handleCalculate();
+    resetOutputs();
+    clearValidationErrors();
+    setCardExpanded('cardComposicaoTotal', false);
+    setCardExpanded('cardLeituraClinica', false);
+    DOM.peso.focus({ preventScroll: true });
    }
 
    function handleAutoRecalculate() {
+    cancelResultNavigation();
+    UI_STATE.revision += 1;
+    UI_STATE.pendingFields = {};
+    UI_STATE.literalWeightInput = false;
+    clearCopyFeedback();
     handleCalculate();
    }
 
-   function bindAutoRecalculation() {
-    // Campos alteráveis não marcáveis recalculam apenas ao sair do campo.
-    [DOM.peso, DOM.perdasExtras, DOM.faixa].forEach(function (element) {
-     if (!element) return;
-     element.addEventListener('blur', handleAutoRecalculate);
-    });
+   function sanitizeWeightInput(rawValue) {
+    const raw = String(rawValue || '');
+    const sign = raw.trim().startsWith('-') ? '-' : '';
+    const digits = raw.replace(/\D/g, '').slice(0, 6);
+    if (digits.length <= 1) return sign + digits;
+    if (digits.length <= 4) return sign + digits.charAt(0) + ',' + digits.slice(1);
+    return sign + digits.slice(0, -3) + ',' + digits.slice(-3);
+   }
 
-    // Opções de marcar recalculam imediatamente ao marcar/desmarcar.
-    [DOM.especial, DOM.diurese].forEach(function (element) {
-     if (!element) return;
+   function cancelResultNavigation() {
+    if (UI_STATE.navigationTimer !== null) clearTimeout(UI_STATE.navigationTimer);
+    UI_STATE.navigationTimer = null;
+   }
+
+   function showExpansionResult() {
+    cancelResultNavigation();
+    const revision = UI_STATE.revision;
+    UI_STATE.navigationTimer = setTimeout(function () {
+     UI_STATE.navigationTimer = null;
+     if (revision !== UI_STATE.revision || hasPendingInput() || !UI_STATE.lastResult) return;
+     const button = document.getElementById('expansionCopyPrescription');
+     button.focus({ preventScroll: true });
+     button.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 0);
+   }
+
+   function confirmNumericField(element) {
+    UI_STATE.replaceOnFirstEdit[element.id] = false;
+    if (!UI_STATE.pendingFields[element.id]) return UI_STATE.lastResult;
+    delete UI_STATE.pendingFields[element.id];
+    if (element === DOM.peso) UI_STATE.literalWeightInput = false;
+    return handleCalculate();
+   }
+
+   function handleNumericInput(element, event) {
+    const id = element.id;
+    if (id === 'peso' && /^insertFrom(?:Paste|Drop)$|^insertReplacementText$/.test(event.inputType || '')) UI_STATE.literalWeightInput = true;
+    if (UI_STATE.replaceOnFirstEdit[id]) {
+     if (/^insert/.test(event.inputType || '') && typeof event.data === 'string') element.value = event.data;
+     else if (/^delete/.test(event.inputType || '')) element.value = '';
+     UI_STATE.replaceOnFirstEdit[id] = false;
+    }
+    cancelResultNavigation();
+    clearElementHighlight(element);
+    clearResultHighlights();
+    clearCopyFeedback();
+    clearValidationErrors();
+    UI_STATE.pendingFields[id] = true;
+    UI_STATE.revision += 1;
+    let value = element.value;
+    if (id === 'peso' && !UI_STATE.literalWeightInput) value = sanitizeWeightInput(value);
+    else if (!value.includes(',')) value = value.replace('.', ',');
+    if (id !== 'peso' && /^[,.]/.test(value)) value = '0,' + value.slice(1);
+    if (element.value !== value) {
+     element.value = value;
+     element.setSelectionRange(value.length, value.length);
+    }
+    DOM.resultados.style.display = 'none';
+    refreshCopyButtons();
+   }
+
+   function handleNumericPaste(element, event) {
+    if (!event.clipboardData || typeof event.clipboardData.getData !== 'function') return;
+    const pasted = event.clipboardData.getData('text').trim();
+    event.preventDefault();
+    const start = UI_STATE.replaceOnFirstEdit[element.id] ? 0 : element.selectionStart;
+    const end = UI_STATE.replaceOnFirstEdit[element.id] ? element.value.length : element.selectionEnd;
+    element.value = element.value.slice(0, start) + pasted + element.value.slice(end);
+    element.setSelectionRange(start + pasted.length, start + pasted.length);
+    handleNumericInput(element, { inputType: 'insertFromPaste', data: null });
+   }
+
+   function bindAutoRecalculation() {
+    [DOM.peso, DOM.perdasExtras].forEach(function (element) {
+     element.addEventListener('focus', function () {
+      cancelResultNavigation();
+      UI_STATE.replaceOnFirstEdit[element.id] = element.value !== '';
+      if (element === DOM.peso) UI_STATE.literalWeightInput = false;
+      if (UI_STATE.replaceOnFirstEdit[element.id]) element.select();
+     });
+     element.addEventListener('beforeinput', function (event) {
+      if (UI_STATE.replaceOnFirstEdit[element.id] && /^(insert|delete)/.test(event.inputType || '')) element.select();
+     });
+     element.addEventListener('paste', function (event) { handleNumericPaste(element, event); });
+     element.addEventListener('input', function (event) { handleNumericInput(element, event); });
+     element.addEventListener('change', function () { confirmNumericField(element); });
+     element.addEventListener('blur', function () { confirmNumericField(element); });
+     element.addEventListener('keydown', function (event) {
+      if (event.key !== 'Enter' || event.isComposing) return;
+      event.preventDefault();
+      const result = confirmNumericField(element);
+      if (element === DOM.peso && DOM.peso.getAttribute('aria-invalid') !== 'true') {
+       DOM.perdasExtras.focus();
+      } else if (element === DOM.perdasExtras && result) {
+       showExpansionResult();
+      } else {
+       const invalid = ['peso', 'perdasExtras', 'faixa'].find(function (id) { return DOM[id].getAttribute('aria-invalid') === 'true'; });
+       if (invalid) DOM[invalid].focus();
+      }
+     });
+    });
+    [DOM.faixa, DOM.especial, DOM.diurese].forEach(function (element) {
+     element.addEventListener('focus', cancelResultNavigation);
      element.addEventListener('change', handleAutoRecalculate);
     });
    }
@@ -1177,9 +1451,35 @@ function readInputs() {
    }
    function bindPrescriptionCopy(buttonId, textareaId, statusId) {
     const button=document.getElementById(buttonId), textarea=document.getElementById(textareaId), status=document.getElementById(statusId);
-    if (!button || !textarea || button.dataset.bound === 'true') return; button.dataset.bound='true'; let statusTimer=null;
-    function showStatus(message,duration){ if(!status)return; if(statusTimer)clearTimeout(statusTimer); status.textContent=message||''; status.classList.toggle('show',Boolean(message)); if(message){statusTimer=setTimeout(function(){status.classList.remove('show');setTimeout(function(){status.textContent='';},220);},duration||1800);}}
-    button.addEventListener('click',function(){const text=textarea.value||'';if(!text.trim()){showStatus('Aguardando cálculo.',1800);return;}if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){navigator.clipboard.writeText(text).then(function(){showStatus('✓ Copiado',1600);}).catch(function(){showStatus(copyPrescriptionFallback(textarea)?'✓ Copiado':'Selecione o texto e copie manualmente.',2600);});return;}showStatus(copyPrescriptionFallback(textarea)?'✓ Copiado':'Selecione o texto e copie manualmente.',2600);});
+    if (!button || !textarea || button.dataset.bound === 'true') return;
+    button.dataset.bound='true';
+    function showStatus(message,duration){
+     if(!status)return;
+     clearTimeout(UI_STATE.copyTimers[statusId]);
+     clearTimeout(UI_STATE.copyClearTimers[statusId]);
+     status.textContent=message||'';
+     status.classList.toggle('show',Boolean(message));
+     if(message){
+      UI_STATE.copyTimers[statusId]=setTimeout(function(){
+       status.classList.remove('show');
+       UI_STATE.copyClearTimers[statusId]=setTimeout(function(){status.textContent='';},220);
+      },duration||1800);
+     }
+    }
+    button.addEventListener('click',function(){
+     if(hasPendingInput() || !UI_STATE.lastResult || button.disabled)return;
+     const text=textarea.value||'';
+     if(!text.trim())return;
+     const revision=UI_STATE.revision;
+     const stillCurrent=function(){return revision===UI_STATE.revision && !hasPendingInput() && !!UI_STATE.lastResult;};
+     if(navigator.clipboard&&typeof navigator.clipboard.writeText==='function'){
+      navigator.clipboard.writeText(text)
+       .then(function(){if(stillCurrent())showStatus('✓ Copiado',1600);})
+       .catch(function(){if(stillCurrent())showStatus(copyPrescriptionFallback(textarea)?'✓ Copiado':'Selecione o texto e copie manualmente.',2600);});
+      return;
+     }
+     if(stillCurrent())showStatus(copyPrescriptionFallback(textarea)?'✓ Copiado':'Selecione o texto e copie manualmente.',2600);
+    });
    }
 
    function bindMinimizableCards() {
@@ -1195,6 +1495,7 @@ function readInputs() {
      function toggleCard() {
       card.classList.toggle('is-minimized');
       title.setAttribute('aria-expanded', String(!card.classList.contains('is-minimized')));
+      if (!card.classList.contains('is-minimized')) resizePrescriptionTextareas();
      }
 
      title.addEventListener('click', toggleCard);
@@ -1218,7 +1519,10 @@ function readInputs() {
     bindPrescriptionCopy('maintenanceCopyPrescription', 'maintenancePrescriptionText', 'maintenanceCopyStatus');
     bindPrescriptionCopy('replacementCopyPrescription', 'replacementPrescriptionText', 'replacementCopyStatus');
     bindPrescriptionCopy('dailyInitialCopyPrescription', 'dailyInitialPrescriptionText', 'dailyInitialCopyStatus');
-    handleCalculate();
+    DOM.faixa.tabIndex = -1;
+    window.addEventListener('resize', resizePrescriptionTextareas);
+    handleCalculate({ initial: true });
+    DOM.peso.focus({ preventScroll: true });
    }
 
    window.HydrationPlanCCore = HydrationPlanCCore;
