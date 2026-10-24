@@ -1,9 +1,9 @@
 
 <!-- NomeDoApp = "Hidratação com Plano C" -->
-<!-- AndroidVersionName = "1.012.10.16" -->
-<!-- VersionName = "1.012.10.16" -->
-<!-- AndroidVersionCode = "262892017" -->
-<!-- VersionCode = "262892017" -->
+<!-- AndroidVersionName = "1.012.10.20" -->
+<!-- VersionName = "1.012.10.20" -->
+<!-- AndroidVersionCode = "262931723" -->
+<!-- VersionCode = "262931723" -->
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -577,7 +577,7 @@
       </div>
     </details>
   <div class="spacer-1line" aria-hidden="true"></div>
-<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.012.10.16</span></div>
+<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.012.10.20</span></div>
   <div class="spacer-3lines" aria-hidden="true"></div>
 </div>
 
@@ -1526,7 +1526,77 @@
    }
 
    window.HydrationPlanCCore = HydrationPlanCCore;
+
+   // Android WebView: estado persistente mínimo, isolado da lógica clínica.
+   const APP_STATE_SCHEMA_VERSION = 1;
+   const STATE_STORAGE_KEY = 'planoc.inputs.v1';
+   let stateSaveTimer = null;
+   function snapshotUserState() {
+    const cards = Array.from(document.querySelectorAll('.card-minimizable')).map(card => ({
+     id: card.id, expanded: !card.classList.contains('is-minimized')
+    }));
+    return { schema: APP_STATE_SCHEMA_VERSION, peso: DOM.peso.value,
+     faixa: DOM.faixa.value, perdasExtras: DOM.perdasExtras.value,
+     especial: DOM.especial.checked, diurese: DOM.diurese.checked, cards: cards,
+     scrollY: Math.max(0, Math.round(window.scrollY || 0)) };
+   }
+   function saveUserState() {
+    window.clearTimeout(stateSaveTimer);
+    try { window.localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(snapshotUserState())); }
+    catch (_) { /* Armazenamento indisponível: manter interface funcional. */ }
+   }
+   function deferSaveUserState() {
+    window.clearTimeout(stateSaveTimer);
+    stateSaveTimer = window.setTimeout(saveUserState, 220);
+   }
+   function restoreUserState() {
+    let saved;
+    try { saved = JSON.parse(window.localStorage.getItem(STATE_STORAGE_KEY) || 'null'); }
+    catch (_) { return; }
+    if (!saved || saved.schema !== APP_STATE_SCHEMA_VERSION || typeof saved !== 'object') return;
+    if (typeof saved.peso === 'string') DOM.peso.value = saved.peso;
+    if (['lt1','ge1',''].includes(saved.faixa)) DOM.faixa.value = saved.faixa;
+    if (typeof saved.perdasExtras === 'string') DOM.perdasExtras.value = saved.perdasExtras;
+    if (typeof saved.especial === 'boolean') DOM.especial.checked = saved.especial;
+    if (typeof saved.diurese === 'boolean') DOM.diurese.checked = saved.diurese;
+    if (Array.isArray(saved.cards)) saved.cards.forEach(function (entry) {
+     if (!entry || typeof entry.id !== 'string') return;
+     const card = document.getElementById(entry.id);
+     if (card && card.classList.contains('card-minimizable') && typeof entry.expanded === 'boolean') {
+      setCardExpanded(entry.id, entry.expanded);
+     }
+    });
+    handleCalculate({ initial: true });
+    if (Number.isFinite(saved.scrollY) && saved.scrollY > 0) {
+     window.setTimeout(function () { window.scrollTo(0, saved.scrollY); }, 180);
+    }
+   }
+   function bindPersistentUserState() {
+    restoreUserState();
+    ['peso','faixa','perdasExtras','especial','diurese'].forEach(function (id) {
+     const element = document.getElementById(id);
+     if (!element) return;
+     element.addEventListener('input', deferSaveUserState);
+     element.addEventListener('change', deferSaveUserState);
+     element.addEventListener('blur', saveUserState);
+    });
+    document.querySelectorAll('.card-minimizable .section-title').forEach(function (el) {
+     el.addEventListener('click', deferSaveUserState);
+     el.addEventListener('keydown', deferSaveUserState);
+    });
+    DOM.btnLimpar.addEventListener('click', function () {
+     window.clearTimeout(stateSaveTimer);
+     try { window.localStorage.removeItem(STATE_STORAGE_KEY); } catch (_) {}
+    });
+    document.addEventListener('visibilitychange', function () {
+     if (document.visibilityState === 'hidden') saveUserState();
+    });
+    window.addEventListener('pagehide', saveUserState);
+    window.addEventListener('scroll', deferSaveUserState, { passive: true });
+   }
+
    document.addEventListener('DOMContentLoaded', init);
+   document.addEventListener('DOMContentLoaded', bindPersistentUserState);
   })();
  </script>
 
