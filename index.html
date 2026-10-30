@@ -1,7 +1,7 @@
 
 <!-- NomeDoApp = "Hidratação com Plano C" -->
-<!-- AndroidVersionName = "1.012.10.20" -->
-<!-- VersionName = "1.012.10.20" -->
+<!-- AndroidVersionName = "1.014.11.01" -->
+<!-- VersionName = "1.014.11.01" -->
 <!-- AndroidVersionCode = "262931723" -->
 <!-- VersionCode = "262931723" -->
 <!doctype html>
@@ -350,16 +350,16 @@
   /* Prescrições copiáveis — mesmo padrão visual do HVIso/HvNeo */
   .prescription-content{position:relative;min-width:0}
   .prescription-card{background:linear-gradient(180deg,#fffdfa 0%,#fff8dd 100%)}
-  .prescription-textarea{display:block;width:100%;max-width:none;min-height:300px;resize:vertical;overflow-y:auto;margin:0;border:1px solid #bfd2e4;border-radius:14px;padding:14px 16px;background:linear-gradient(180deg,#fffdfa 0%,#fff8dd 100%);color:var(--text);line-height:1.5;font-family:inherit;font-size:.92rem;outline:none}
+  .prescription-textarea{display:block;width:100%;max-width:none;min-height:0;resize:none;overflow-y:hidden;margin:0;border:1px solid #bfd2e4;border-radius:14px;padding:14px 16px;background:#fff4cc;color:var(--text);line-height:1.5;font-family:inherit;font-size:.92rem;outline:none}
   .prescription-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(15,111,198,.12)}
   input.is-recalculated,.prescription-textarea.is-recalculated{background:#bfdbfe}
   .prescription-actions button:disabled{opacity:.5;cursor:default}
-  .prescription-actions{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
-  .prescription-actions button{width:100%;min-width:0;min-height:44px;margin:0;padding:10px 12px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;font-size:.9rem}
+  .prescription-actions{display:flex;align-items:center;gap:10px;margin-top:12px}
+  .prescription-actions button{flex:1;width:auto;min-width:0;min-height:44px;margin:0;padding:10px 12px;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.2;font-size:.9rem}
   .prescription-toast{position:fixed;left:50%;bottom:calc(max(16px,env(safe-area-inset-bottom)) + 62px);z-index:1800;max-width:min(340px,calc(100vw - 32px));padding:8px 12px;border:1px solid #cbdbea;border-radius:999px;background:rgba(255,255,255,.98);color:#173a6d;box-shadow:0 10px 28px rgba(15,23,42,.18);font-size:.8rem;font-weight:700;text-align:center;opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,8px);transition:opacity .18s ease,transform .18s ease,visibility .18s ease}
   .prescription-toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
   .prescription-note{margin:0 0 10px;color:var(--muted);font-size:.82rem;line-height:1.4}
-  @media(max-width:560px){.prescription-textarea{min-height:320px;padding:13px 14px;font-size:.9rem}}
+  @media(max-width:560px){.prescription-textarea{min-height:0;padding:13px 14px;font-size:.9rem}}
 
   .legal-disclaimer{
       margin-top:16px;
@@ -457,19 +457,62 @@
    margin: 0 0 10px;
   }
 
+   .planoc-top-actions{align-items:center;justify-content:center;gap:10px;margin:14px 0 8px;flex-wrap:wrap}
+   .planoc-language-label{display:inline-flex;align-items:center;gap:8px;margin:0;font-size:.85rem;white-space:nowrap}
+   .planoc-language-label select{width:95px;min-height:44px;padding:7px 6px;border:1px solid var(--border);border-radius:10px;font-size:.85rem}
+   .planoc-bottom-actions{justify-content:center;margin:18px 0 6px;gap:10px}
+   .planoc-bottom-actions button{min-width:130px}
+   .planoc-references ol{padding-left:22px;margin:0;line-height:1.6}
+   .planoc-references li{margin-bottom:12px;overflow-wrap:anywhere}
+   .planoc-references a{overflow-wrap:anywhere;color:var(--accent)}
+   @media(max-width:420px){.planoc-bottom-actions button{min-width:0;flex:1}.planoc-top-actions{flex-wrap:wrap}}
+
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+ /* Padronização visual Apgar/Preparo — sem alterações na lógica clínica */
+body{background:#e8f0fe;padding:24px 16px 48px}
+.wrap{max-width:980px;padding:0;display:flex;flex-direction:column;gap:20px}
+.wrap>.card:first-child{padding:18px}
+.wrap>.card:first-child>.espaco-antes-titulo{display:none}
+.planoc-hero{background:linear-gradient(135deg,#f8fbff,#dbeafe);border:1px solid #cbd5e1;border-radius:22px;box-shadow:0 16px 34px rgba(18,44,73,.10);padding:20px;text-align:center}
+.planoc-hero .main-title-box{display:flex;align-items:center;justify-content:center;gap:9px;background:none;border:0;border-radius:0;padding:0;margin:0;color:#1a3a6b;font-size:clamp(1.35rem,3.5vw,2.05rem);line-height:1.05;letter-spacing:normal}
+.planoc-title-icon{flex:0 0 auto}
+.planoc-hero .lead{margin:10px auto 0;max-width:64ch;font-size:.92rem;line-height:1.55;text-align:center}
+.planoc-top-actions{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;margin:14px 0 20px}
+.planoc-top-actions .secondary{min-height:44px;border:1.5px solid #cbd5e1;border-radius:10px;background:#eef3f8;color:#264764;font-family:Arial,Helvetica,sans-serif;font-weight:700}
+.planoc-language-label{display:inline-flex;align-items:center;gap:8px;min-height:44px;flex-wrap:nowrap;font-family:Arial,Helvetica,sans-serif;font-size:.92rem;font-weight:600;color:#19466f}
+.planoc-language-label select{width:auto;min-width:112px;max-width:100%;box-sizing:border-box;min-height:44px;padding:8px 24px 8px 8px;border:1.5px solid #cbd5e1;border-radius:10px;background:#eef3f8;color:#264764;font-family:Arial,Helvetica,sans-serif;font-size:.92rem;font-weight:400;color-scheme:light;cursor:pointer}
+.planoc-language-label select:focus-visible{outline:2px solid #2563a8;outline-offset:2px}
+.planoc-bottom-actions{display:flex;align-items:center;justify-content:flex-start;gap:10px;margin:18px 0 6px}
+.planoc-bottom-actions button:not(.planoc-top-arrow){flex:1;min-width:0}
+.planoc-top-arrow{width:48px;min-width:48px;min-height:44px;padding:8px;display:inline-flex;align-items:center;justify-content:center;border:1px solid #cbd5e1;border-radius:10px;background:#eef3f8;color:#1a3a6b}
+.planoc-top-arrow svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.planoc-bottom-actions .planoc-top-arrow{flex:0 0 48px}
+.prescription-actions .planoc-top-arrow{flex:0 0 48px;width:48px;min-width:48px;padding:8px}
+/* P1: apresentação do aviso de persistência, sem alterar sua condição de exibição. */
+.planoc-restored-notice:not([hidden]){display:block;margin:0 0 14px;padding:10px 12px;background:#FDE68A;color:#713F12;border:1px solid #B45309;border-radius:12px;font-size:.84rem;line-height:1.4;font-weight:400;overflow-wrap:anywhere}
+.planoc-result-arrow-row{display:flex;justify-content:flex-end;margin:0 0 16px;min-height:44px}
+#planocReferencias{margin-top:20px}
+#planocReferencias+.legal-disclaimer{margin-top:-10px}
+.planoc-footer-row{position:relative;min-height:48px;display:flex;align-items:center;justify-content:center;margin-top:0}
+.planoc-footer-row .signature-block{margin:0;padding:0 54px;width:100%;text-align:center;font-size:14px;line-height:1.5}
+.planoc-footer-row .planoc-top-arrow{position:absolute;right:0;top:50%;transform:translateY(-50%)}
+@media(max-width:560px){body{padding:24px 16px 48px}.wrap>.card:first-child{padding:14px}.planoc-hero{padding:20px}.planoc-hero .main-title-box{font-size:clamp(1.3rem,5.5vw,1.6rem)}.planoc-bottom-actions button{padding-left:7px;padding-right:7px}}
+@media(max-width:380px){.planoc-top-actions{gap:7px}.planoc-top-actions .secondary{padding:10px 9px;font-size:.93rem}.planoc-language-label{gap:5px;font-size:.84rem}.planoc-language-label select{width:auto;min-width:112px;padding:8px 24px 8px 8px;font-size:.92rem}}
   </style>
 </head>
 <body>
  <div class="wrap">
   <div class="card">
    <div class="espaco-antes-titulo" aria-hidden="true"></div>
-      <h1 class="main-title-box">💧Hidratação Venosa com o Plano C na desidratação</h1>
-   <p class="lead">Ferramenta de apoio para desidratação grave por diarreia, baseada nas fórmulas do Ministério da Saúde para Plano C.</p>
+      <div class="planoc-hero"><h1 class="main-title-box"><span class="planoc-title-icon" aria-hidden="true">💧</span><span>Hidratação Venosa com o Plano C na desidratação</span></h1><p class="lead">Ferramenta de apoio para desidratação grave por diarreia, baseada nas fórmulas do Ministério da Saúde para Plano C.</p></div>
 
+   <div class="actions planoc-top-actions"><button class="secondary" type="button" id="btnLimpar">Limpar dados</button><label class="planoc-language-label" for="planocLanguage">Idioma <select id="planocLanguage" aria-label="Selecionar idioma"><option value="pt-BR">Português</option><option value="en-US">English</option></select></label></div>
+
+   <div id="planocRestoredNotice" class="planoc-restored-notice" role="status" hidden>Dados e resultados anteriores foram recuperados. Confirme as informações antes de utilizá-los.</div>
    <div class="inputs">
     <div>
      <label for="peso">Peso (kg)</label>
-     <input type="text" id="peso" name="peso" value="6,000" inputmode="numeric" enterkeyhint="next" maxlength="8" autocomplete="off" aria-describedby="pesoError" aria-invalid="false">
+     <input type="text" id="peso" name="peso" value="6,000" inputmode="decimal" enterkeyhint="next" maxlength="8" autocomplete="off" aria-describedby="pesoError" aria-invalid="false">
      <div id="pesoError" class="field-error" role="alert" hidden></div>
     </div>
     <div>
@@ -500,9 +543,7 @@
     </div>
    </div>
 
-   <div class="actions">
-    <button class="secondary" type="button" id="btnLimpar">Limpar</button>
-   </div>
+   <div class="actions planoc-bottom-actions"><button type="button" class="primary" id="btnCalcularRodape">Calcular</button><button type="button" class="secondary" id="btnLimparRodape">Limpar</button><button type="button" class="planoc-top-arrow" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
 <div class="alert" id="alertBox" role="alert" aria-live="polite"></div>
   </div>
 
@@ -510,8 +551,8 @@
    <div class="card span-6 prescription-card">
     <h2 class="section-title">Fase de Expansão</h2>
     <div class="prescription-content">
-     <textarea id="expansionPrescriptionText" rows="10" class="prescription-textarea" readonly aria-label="Prescrição da fase de expansão"></textarea>
-     <div class="prescription-actions"><button type="button" class="secondary" id="expansionCopyPrescription">Copiar Prescrição</button></div>
+     <textarea id="expansionPrescriptionText" rows="2" class="prescription-textarea" readonly aria-label="Prescrição da fase de expansão"></textarea>
+     <div class="prescription-actions"><button type="button" class="secondary" id="expansionCopyPrescription">Copiar Prescrição</button><button type="button" class="planoc-top-arrow" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
      <div class="prescription-toast" id="expansionCopyStatus" aria-live="polite" aria-atomic="true"></div>
     </div>
    </div>
@@ -520,8 +561,8 @@
     <div class="subtitle-blank-line" aria-hidden="true"></div>
     <div class="section-subtitle">Volume base da fórmula de Holliday-Segar para a manutenção da hidratação.</div>
     <div class="prescription-content">
-     <textarea id="maintenancePrescriptionText" rows="8" class="prescription-textarea" readonly aria-label="Prescrição da manutenção em 24 horas"></textarea>
-     <div class="prescription-actions"><button type="button" class="secondary" id="maintenanceCopyPrescription">Copiar Prescrição</button></div>
+     <textarea id="maintenancePrescriptionText" rows="2" class="prescription-textarea" readonly aria-label="Prescrição da manutenção em 24 horas"></textarea>
+     <div class="prescription-actions"><button type="button" class="secondary" id="maintenanceCopyPrescription">Copiar Prescrição</button><button type="button" class="planoc-top-arrow" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
      <div class="prescription-toast" id="maintenanceCopyStatus" aria-live="polite" aria-atomic="true"></div>
     </div>
    </div>
@@ -530,8 +571,8 @@
     <div class="subtitle-blank-line" aria-hidden="true"></div>
     <div class="section-subtitle">Infundir juntamente com a manutenção após a fase de expansão e manter até cessar as perdas pelas fezes líquidas.</div>
     <div class="prescription-content">
-     <textarea id="replacementPrescriptionText" rows="7" class="prescription-textarea" readonly aria-label="Prescrição da reposição inicial em 24 horas"></textarea>
-     <div class="prescription-actions"><button type="button" class="secondary" id="replacementCopyPrescription">Copiar Prescrição</button></div>
+     <textarea id="replacementPrescriptionText" rows="2" class="prescription-textarea" readonly aria-label="Prescrição da reposição inicial em 24 horas"></textarea>
+     <div class="prescription-actions"><button type="button" class="secondary" id="replacementCopyPrescription">Copiar Prescrição</button><button type="button" class="planoc-top-arrow" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
      <div class="prescription-toast" id="replacementCopyStatus" aria-live="polite" aria-atomic="true"></div>
     </div>
    </div>
@@ -541,8 +582,8 @@
      <div class="subtitle-blank-line" aria-hidden="true"></div>
      <div class="section-subtitle">Soma da Manutenção em 24 horas com a Reposição inicial em 24 horas, sem incluir o volume da fase de expansão.</div>
      <div class="prescription-content">
-      <textarea id="dailyInitialPrescriptionText" rows="8" class="prescription-textarea" readonly aria-label="Prescrição da hidratação diária inicial sem expansão"></textarea>
-      <div class="prescription-actions"><button type="button" class="secondary" id="dailyInitialCopyPrescription">Copiar Prescrição</button></div>
+      <textarea id="dailyInitialPrescriptionText" rows="2" class="prescription-textarea" readonly aria-label="Prescrição da hidratação diária inicial sem expansão"></textarea>
+      <div class="prescription-actions"><button type="button" class="secondary" id="dailyInitialCopyPrescription">Copiar Prescrição</button><button type="button" class="planoc-top-arrow" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
       <div class="prescription-toast" id="dailyInitialCopyStatus" aria-live="polite" aria-atomic="true"></div>
      </div>
     </div>
@@ -570,18 +611,78 @@
     </div>
    </div>
   </div>
+
+   <details class="legal-disclaimer legal-disclaimer-collapsible planoc-references" id="planocReferencias"><summary>Referências</summary><div class="legal-disclaimer-content"><ol>
+   <li>BRASIL. Ministério da Saúde. <em>Manejo do paciente com diarreia</em>. Brasília: Ministério da Saúde, 2005. Disponível em: <a href="https://bvsms.saude.gov.br/bvs/publicacoes/manejo_paciente_diarreia.pdf" target="_blank" rel="noopener noreferrer">https://bvsms.saude.gov.br/bvs/publicacoes/manejo_paciente_diarreia.pdf</a>. Acesso em: 27 out. 2026.</li>
+   <li>WORLD HEALTH ORGANIZATION. <em>The treatment of diarrhoea: a manual for physicians and other senior health workers</em>. 4. ed. Geneva: World Health Organization, 2005. Disponível em: <a href="https://iris.who.int/handle/10665/43209" target="_blank" rel="noopener noreferrer">https://iris.who.int/handle/10665/43209</a>. Acesso em: 27 out. 2026.</li>
+   <li>HOLLIDAY, M. A.; SEGAR, W. E. The maintenance need for water in parenteral fluid therapy. <em>Pediatrics</em>, v. 19, n. 5, p. 823-832, maio 1957. Disponível em: <a href="https://publications.aap.org/pediatrics/article-abstract/19/5/823/26252" target="_blank" rel="noopener noreferrer">https://publications.aap.org/pediatrics/article-abstract/19/5/823/26252</a>. Acesso em: 27 out. 2026.</li>
+   </ol></div></details>
     <details class="legal-disclaimer legal-disclaimer-collapsible">
       <summary>Aviso Legal e Isenção de Responsabilidade</summary>
       <div class="legal-disclaimer-content">
         Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.
       </div>
     </details>
-  <div class="spacer-1line" aria-hidden="true"></div>
-<div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.012.10.20</span></div>
-  <div class="spacer-3lines" aria-hidden="true"></div>
+  <div class="planoc-footer-row"><div class="signature-block"><strong>Desenvolvido por Adão L. L. Couto</strong><br><span class="version-name">1.014.11.01</span></div><button type="button" class="planoc-top-arrow" aria-label="Voltar ao início" title="Voltar ao início"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></div>
 </div>
 
  
+<script id="planoc-i18n">
+(function(){'use strict';
+const STATIC={"💧Hidratação Venosa com o Plano C na desidratação": "💧Intravenous Rehydration — Plan C", "Ferramenta de apoio para desidratação grave por diarreia, baseada nas fórmulas do Ministério da Saúde para Plano C.": "Support tool for severe dehydration due to diarrhea, based on Brazilian Ministry of Health Plan C formulas.", "Peso (kg)": "Weight (kg)", "Faixa etária para a fase de expansão": "Age group for the rapid rehydration phase", "Selecione": "Select", "Menor de 1 ano": "Under 1 year", "1 ano ou mais": "1 year or older", "Perdas contínuas adicionais (mL/24h)": "Additional ongoing losses (mL/24h)", "Somadas manualmente à reposição inicial de 50 mL/kg/dia.": "Added manually to the initial replacement of 50 mL/kg/day.", "Recém-nascido ou menor de 5 anos com cardiopatia grave": "Newborn or child under 5 years with severe heart disease", "Os 10ml/kg devem ser repetidos após avaliação médica e até totalizar o recomendado da fase de expansão.": "Repeat 10 mL/kg only after medical reassessment until the recommended rapid rehydration volume is reached.", "Diurese estabelecida": "Urine output established", "Se marcado, o cálculo adiciona KCl 10% à manutenção: 2 mL para cada 100 mL de solução de manutenção.": "If checked, the calculation adds 10% KCl to maintenance: 2 mL per 100 mL of maintenance fluid.", "Limpar dados": "Clear data", "Limpar": "Clear", "Calcular": "Calculate", "Fase de Expansão": "Rapid Rehydration Phase", "Copiar Prescrição": "Copy Prescription", "Manutenção em 24 horas": "24-hour Maintenance", "Volume base da fórmula de Holliday-Segar para a manutenção da hidratação.": "Baseline maintenance volume using the Holliday–Segar formula.", "Reposição inicial em 24 horas": "Initial Replacement Over 24 Hours", "Infundir juntamente com a manutenção após a fase de expansão e manter até cessar as perdas pelas fezes líquidas.": "Infuse together with maintenance after the rapid rehydration phase and continue until diarrheal fluid losses cease.", "Hidratação Diária Inicial sem o Volume de Expansão": "Initial Daily IV Fluids Excluding Rapid Rehydration", "Soma da Manutenção em 24 horas com a Reposição inicial em 24 horas, sem incluir o volume da fase de expansão.": "Sum of 24-hour maintenance and initial 24-hour replacement, excluding rapid rehydration volume.", "Leitura clínica do cálculo": "Clinical interpretation of the calculation", "Base do cálculo:": "Calculation basis:", "Plano C do Ministério da Saúde para manejo do paciente com diarreia (expansão, manutenção e reposição).": "Brazilian Ministry of Health Plan C for diarrhea management (rapid rehydration, maintenance, and replacement).", "Ordem de uso das prescrições:": "Order of prescription use:", "Primeiro: infundir a fase de expansão (etapa rápida).": "First: administer the rapid rehydration phase.", "Administrar a 1ª fase e depois a 2ª fase, seguindo os volumes e tempos calculados. Quando selecionado o início cauteloso, seguir esse esquema com reavaliação antes de repetir os volumes.": "Administer phase 1, then phase 2, using the calculated volumes and durations. If cautious initiation is selected, reassess the patient before repeating any volume.", "Depois: infundir manutenção e reposição no mesmo período de 24 horas.": "Then: administer maintenance and replacement during the same 24-hour period.", "Usar as prescrições": "Use the prescriptions", "e": "and", "juntas. O quadro": "together. The section", "Hidratação diária inicial sem o volume de expansão": "Initial daily IV fluids excluding rapid rehydration", "já reúne as duas e pode ser usado como alternativa à apresentação separada; não deve ser somado novamente a elas.": "already combines both and may be used instead of separate prescriptions; it must not be added to them again.", "No segundo dia de internação e nos seguintes, ao renovar a prescrição:": "On the second and subsequent days of hospitalization, when renewing the prescription:", "Se persistirem perdas e a indicação de hidratação venosa:": "If ongoing losses and an indication for IV fluids persist:", "reavaliar a manutenção e ajustar a reposição às perdas atuais, sem repetir automaticamente o volume inicial.": "reassess maintenance and adjust replacement to current losses, without automatically repeating the initial volume.", "Se as perdas tiverem cessado, mas ainda houver indicação de hidratação venosa:": "If losses have stopped but IV fluids are still indicated:", "usar somente a manutenção, ajustada à necessidade atual.": "use maintenance only, adjusted to current needs.", "Se estiver reidratado e conseguir manter a hidratação com solução de sais de reidratação oral (SRO):": "If rehydrated and able to maintain hydration with oral rehydration solution (ORS):", "suspender a hidratação venosa.": "discontinue IV fluids.", "A fase de expansão não é repetida automaticamente a cada novo dia; depende de nova indicação clínica.": "The rapid rehydration phase is not automatically repeated each day; a new clinical indication is required.", "Importante:": "Important:", "esta página é apoio de cálculo e não substitui reavaliação clínica, controle de diurese, eletrólitos, glicemia, balanço hídrico, nem adaptação para cenários especiais (sepse, choque de outra etiologia, hipernatremia, insuficiência renal, cetoacidose diabética, queimaduras, desnutrição grave etc.). Em pediatria hospitalar, o uso de KCl exige diurese estabelecida e monitorização laboratorial.": "This page is a calculation aid and does not replace clinical reassessment, urine output monitoring, electrolytes, glucose, fluid balance, or adjustments for special conditions (sepsis, shock from other causes, hypernatremia, kidney failure, diabetic ketoacidosis, burns, severe malnutrition, etc.). In hospitalized children, KCl requires established urine output and laboratory monitoring.", "Aviso Legal e Isenção de Responsabilidade": "Medical Disclaimer and Limitation of Liability", "Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.": "This software and all information herein are provided solely for educational purposes and as a medical reference aid. THIS SYSTEM DOES NOT REPLACE INDIVIDUAL CLINICAL JUDGMENT, HISTORY TAKING, OR PHYSICAL EXAMINATION. Information must not be used alone to diagnose or treat patients. All clinical decisions, prescriptions, and interventions remain the sole responsibility of a qualified treating healthcare professional. Developers do not guarantee the absolute accuracy of the information and disclaim liability for harm arising from misuse, misinterpretation, or exclusive reliance on this system. Patients and nonprofessionals should seek guidance from a qualified physician before making health decisions.", "Desenvolvido por Adão L. L. Couto": "Developed by Adão L. L. Couto", "Prescrição da fase de expansão": "Rapid rehydration prescription", "Prescrição da manutenção em 24 horas": "24-hour maintenance prescription", "Prescrição da reposição inicial em 24 horas": "Initial 24-hour replacement prescription", "Prescrição da hidratação diária inicial sem expansão": "Initial daily IV fluids prescription excluding rapid rehydration"};
+const PHRASES=[["💧Hidratação Venosa com o Plano C na desidratação", "💧Intravenous Rehydration — Plan C"], ["Ferramenta de apoio para desidratação grave por diarreia, baseada nas fórmulas do Ministério da Saúde para Plano C.", "Support tool for severe dehydration due to diarrhea, based on Brazilian Ministry of Health Plan C formulas."], ["Peso (kg)", "Weight (kg)"], ["Faixa etária para a fase de expansão", "Age group for the rapid rehydration phase"], ["Selecione", "Select"], ["Menor de 1 ano", "Under 1 year"], ["1 ano ou mais", "1 year or older"], ["Perdas contínuas adicionais (mL/24h)", "Additional ongoing losses (mL/24h)"], ["Somadas manualmente à reposição inicial de 50 mL/kg/dia.", "Added manually to the initial replacement of 50 mL/kg/day."], ["Recém-nascido ou menor de 5 anos com cardiopatia grave", "Newborn or child under 5 years with severe heart disease"], ["Os 10ml/kg devem ser repetidos após avaliação médica e até totalizar o recomendado da fase de expansão.", "Repeat 10 mL/kg only after medical reassessment until the rapid rehydration phase target is reached."], ["Diurese estabelecida", "Urine output established"], ["Se marcado, o cálculo adiciona KCl 10% à manutenção: 2 mL para cada 100 mL de solução de manutenção.", "If checked, the calculation adds 10% KCl to maintenance: 2 mL per 100 mL of maintenance fluid."], ["Fase de Expansão", "Rapid Rehydration Phase"], ["Copiar Prescrição", "Copy Prescription"], ["Manutenção em 24 horas", "24-hour Maintenance"], ["Volume base da fórmula de Holliday-Segar para a manutenção da hidratação.", "Baseline maintenance volume using the Holliday–Segar formula."], ["Reposição inicial em 24 horas", "Initial Replacement Over 24 Hours"], ["Infundir juntamente com a manutenção após a fase de expansão e manter até cessar as perdas pelas fezes líquidas.", "Infuse together with maintenance after the rapid rehydration phase and continue until diarrheal fluid losses cease."], ["Hidratação Diária Inicial sem o Volume de Expansão", "Initial Daily IV Fluids Excluding Rapid Rehydration"], ["Soma da Manutenção em 24 horas com a Reposição inicial em 24 horas, sem incluir o volume da fase de expansão.", "Sum of 24-hour maintenance and initial 24-hour replacement, excluding rapid rehydration volume."], ["Leitura clínica do cálculo", "Clinical interpretation of the calculation"], ["Base do cálculo:", "Calculation basis:"], ["Plano C do Ministério da Saúde para manejo do paciente com diarreia (expansão, manutenção e reposição).", "Brazilian Ministry of Health Plan C for diarrhea management (rapid rehydration, maintenance, and replacement)."], ["Ordem de uso das prescrições:", "Order of prescription use:"], ["Primeiro: infundir a fase de expansão (etapa rápida).", "First: administer the rapid rehydration phase."], ["Administrar a 1ª fase e depois a 2ª fase, seguindo os volumes e tempos calculados. Quando selecionado o início cauteloso, seguir esse esquema com reavaliação antes de repetir os volumes.", "Administer phase 1, then phase 2, using the calculated volumes and durations. If cautious initiation is selected, reassess the patient before repeating any volume."], ["Depois: infundir manutenção e reposição no mesmo período de 24 horas.", "Then: administer maintenance and replacement during the same 24-hour period."], ["Usar as prescrições", "Use the prescriptions"], ["juntas. O quadro", "together. The section"], ["Hidratação diária inicial sem o volume de expansão", "Initial daily IV fluids excluding rapid rehydration"], ["já reúne as duas e pode ser usado como alternativa à apresentação separada; não deve ser somado novamente a elas.", "already combines both and may be used instead of separate prescriptions; it must not be added to them again."], ["No segundo dia de internação e nos seguintes, ao renovar a prescrição:", "On the second and subsequent days of hospitalization, when renewing the prescription:"], ["Se persistirem perdas e a indicação de hidratação venosa:", "If ongoing losses and an indication for IV fluids persist:"], ["reavaliar a manutenção e ajustar a reposição às perdas atuais, sem repetir automaticamente o volume inicial.", "reassess maintenance and adjust replacement to current losses, without automatically repeating the initial volume."], ["Se as perdas tiverem cessado, mas ainda houver indicação de hidratação venosa:", "If losses have stopped but IV fluids are still indicated:"], ["usar somente a manutenção, ajustada à necessidade atual.", "use maintenance only, adjusted to current needs."], ["Se estiver reidratado e conseguir manter a hidratação com solução de sais de reidratação oral (SRO):", "If rehydrated and able to maintain hydration with oral rehydration solution (ORS):"], ["suspender a hidratação venosa.", "discontinue IV fluids."], ["A fase de expansão não é repetida automaticamente a cada novo dia; depende de nova indicação clínica.", "The rapid rehydration phase is not automatically repeated each day; a new clinical indication is required."], ["Importante:", "Important:"], ["esta página é apoio de cálculo e não substitui reavaliação clínica, controle de diurese, eletrólitos, glicemia, balanço hídrico, nem adaptação para cenários especiais (sepse, choque de outra etiologia, hipernatremia, insuficiência renal, cetoacidose diabética, queimaduras, desnutrição grave etc.). Em pediatria hospitalar, o uso de KCl exige diurese estabelecida e monitorização laboratorial.", "This page is a calculation aid and does not replace clinical reassessment, urine output monitoring, electrolytes, glucose, fluid balance, or adjustments for special conditions (sepsis, shock from other causes, hypernatremia, kidney failure, diabetic ketoacidosis, burns, severe malnutrition, etc.). In hospitalized children, KCl requires established urine output and laboratory monitoring."], ["Aviso Legal e Isenção de Responsabilidade", "Medical Disclaimer and Limitation of Liability"], ["Este software e todas as informações nele contidas são fornecidos exclusivamente com propósitos educacionais e de auxílio à referência médica. ESTE SISTEMA NÃO SUBSTITUI O JULGAMENTO CLÍNICO INDIVIDUAL, A ANAMNESE E O EXAME FÍSICO. As informações aqui apresentadas não devem ser utilizadas isoladamente para o diagnóstico, conduta ou tratamento de pacientes. A responsabilidade final por qualquer decisão clínica, prescrição ou intervenção é exclusiva do profissional de saúde assistente, devidamente habilitado. Os desenvolvedores não garantem a precisão absoluta de todos os dados e isentam-se de responsabilidade por quaisquer danos diretos, indiretos, materiais ou morais que resultem do uso inadequado, interpretação equivocada ou confiança exclusiva nas informações deste sistema. Pacientes e indivíduos leigos que utilizarem este software devem sempre buscar a orientação de um médico qualificado antes de tomar qualquer decisão sobre sua saúde.", "This software and all information herein are provided solely for educational purposes and as a medical reference aid. THIS SYSTEM DOES NOT REPLACE INDIVIDUAL CLINICAL JUDGMENT, HISTORY TAKING, OR PHYSICAL EXAMINATION. Information must not be used alone to diagnose or treat patients. All clinical decisions, prescriptions, and interventions remain the sole responsibility of a qualified treating healthcare professional. Developers do not guarantee the absolute accuracy of the information and disclaim liability for harm arising from misuse, misinterpretation, or exclusive reliance on this system. Patients and nonprofessionals should seek guidance from a qualified physician before making health decisions."], ["Desenvolvido por Adão L. L. Couto", "Developed by Adão L. L. Couto"], ["Prescrição da fase de expansão", "Rapid rehydration prescription"], ["Prescrição da manutenção em 24 horas", "24-hour maintenance prescription"], ["Prescrição da reposição inicial em 24 horas", "Initial 24-hour replacement prescription"], ["Prescrição da hidratação diária inicial sem expansão", "Initial daily IV fluids prescription excluding rapid rehydration"], ["Início cauteloso", "Cautious initiation"], ["Reavaliar e repetir 10 mL/kg conforme avaliação médica até totalizar o recomendado da fase de expansão.", "Reassess and repeat 10 mL/kg as medically indicated until the rapid rehydration phase target is reached."], ["1ª fase", "Phase 1"], ["2ª fase", "Phase 2"], ["S.F. 0,9% ou Ringer Lactato", "0.9% normal saline or Ringer lactate"], ["S.G. 5%", "5% dextrose"], ["S.F. 0,9%", "0.9% normal saline"], ["Infundir em ", "Infuse over "], ["Infundir a ", "Infuse at "], ["Volume Total =", "Total volume ="], ["Tempo Total =", "Total duration ="], ["Volume em 24 h =", "Volume over 24 h ="], ["Volume por etapa =", "Volume per stage ="], ["Etapas:", "Stages:"], ["Peso:", "Weight:"], ["Faixa etária:", "Age group:"], ["Diurese estabelecida:", "Urine output established:"], ["Sim", "Yes"], ["Não", "No"], ["mL/hora", "mL/hour"], [" horas", " hours"], [" hora", " hour"], ["Fase de expansão", "Rapid rehydration phase"], ["Manutenção:", "Maintenance:"], ["Reposição:", "Replacement:"], ["Expansão cautelosa:", "Cautious rehydration:"], ["Expansão:", "Rapid rehydration:"], [" em ", " over "], ["Total da expansão exibida:", "Displayed rapid rehydration total:"], ["Total da expansão:", "Total rapid rehydration:"], [" / 24 h pelo método 100/50/20, correspondendo a SG 5% ", " / 24 h using the 100/50/20 method, consisting of 5% dextrose "], ["KCl 10% calculado:", "Calculated 10% KCl:"], ["KCl não adicionado porque a diurese não foi marcada como estabelecida.", "KCl not added because established urine output was not confirmed."], ["valor inicial ", "initial amount "], [" / 24 h, acrescido de perdas contínuas extras de ", " / 24 h, plus additional ongoing losses of "], ["totalizando", "totaling"], ["Segurança do potássio:", "Potassium safety:"], ["o KCl foi mantido em zero porque a diurese não foi confirmada. A adição de potássio depende de diurese estabelecida e monitorização laboratorial.", "KCl remains zero because urine output was not confirmed. Potassium supplementation requires established urine output and laboratory monitoring."], ["Atenção:", "Warning:"], ["taxa calculada superior ao limite de bomba de infusão padrão. Necessário acesso calibroso e infusão em fluxo livre (gravidade) ou bolsa de pressão.", "calculated infusion rate exceeds the standard infusion pump limit. Appropriate large-bore access and gravity infusion or a pressure bag are required."], ["O peso inserido é atípico para um lactente menor de 1 ano. Confirme a faixa etária para garantir o tempo correto de expansão.", "The entered weight is atypical for an infant under 1 year. Confirm the age group to ensure the appropriate rapid rehydration duration."], ["A fórmula estrita do Plano C (mL/kg) hiperestima volumes em adultos e adolescentes de grande porte. A expansão e reposição devem ser guiadas por metas clínicas (PA, diurese, lactato) e não por peso absoluto.", "Strict Plan C weight-based volumes may overestimate requirements in large adolescents and adults. Guide rapid rehydration and replacement by clinical targets (blood pressure, urine output, lactate), not weight alone."], ["Informe um peso válido em kg.", "Enter a valid weight in kg."], ["Informe perdas contínuas adicionais válidas.", "Enter valid additional ongoing losses."], ["Selecione uma faixa etária válida.", "Select a valid age group."], ["✓ Copiado", "✓ Copied"], ["Selecione o texto e copie manualmente.", "Select the text and copy it manually."], ["Ex.: 150", "E.g., 150"]];
+PHRASES.push(['SF 0,9%','0.9% normal saline'], ['/hour de ','/hour every ']);
+const originals=[];
+let current='pt-BR';
+function locale(){return current;}
+function translate(input){
+ if(current!=='en-US'||!input)return input;
+ let s=String(input);
+ const trimmed=s.trim();
+ if(Object.prototype.hasOwnProperty.call(STATIC,trimmed)) return s.replace(trimmed,STATIC[trimmed]);
+ const items=PHRASES.slice().sort((a,b)=>b[0].length-a[0].length);
+ for(const [pt,en] of items) s=s.split(pt).join(en);
+ s=s.replace(/mL\/hour de /g,'mL/hour every ');
+ return s;
+}
+function initStatic(){
+ const root=document.querySelector('.wrap');
+ if(!root)return;
+ const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+ while(walker.nextNode()){
+  const node=walker.currentNode;
+  if(!node.nodeValue.trim())continue;
+  if(node.parentElement&&node.parentElement.closest('script,style,#mensagens,#alertBox,.field-error,.prescription-toast,.planoc-references'))continue;
+  originals.push([node,node.nodeValue]);
+ }
+ const ids=['peso','perdasExtras','expansionPrescriptionText','maintenancePrescriptionText','replacementPrescriptionText','dailyInitialPrescriptionText'];
+ for(const id of ids){const el=document.getElementById(id);if(!el)continue;
+  for(const attr of ['placeholder','aria-label'])if(el.hasAttribute(attr))originals.push([el,attr,el.getAttribute(attr)]);
+ }
+}
+function apply(){
+ document.documentElement.lang=current;
+ document.title=current==='en-US'?'Plan C IV Rehydration Calculator':'Cálculo de Hidratação Plano C';
+ const desc=document.querySelector('meta[name="description"]');if(desc)desc.content=current==='en-US'?'Support tool for intravenous Plan C treatment of severe dehydration due to diarrhea.':'Ferramenta de apoio para hidratação intravenosa no Plano C de desidratação grave por diarreia.';
+ for(const entry of originals){
+  if(entry.length===2)entry[0].nodeValue=current==='en-US'?translate(entry[1]):entry[1];
+  else entry[0].setAttribute(entry[1],current==='en-US'?translate(entry[2]):entry[2]);
+ }
+ const lbl=document.querySelector('.planoc-language-label');if(lbl&&lbl.firstChild)lbl.firstChild.nodeValue=current==='en-US'?'Language ':'Idioma ';
+ const meta=document.querySelector('.planoc-references summary');if(meta)meta.textContent=current==='en-US'?'References':'Referências';
+ const li=document.querySelectorAll('.planoc-references li');
+ li.forEach(el=>{const textNodes=[];const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);while(walker.nextNode())textNodes.push(walker.currentNode); for(const n of textNodes){n.nodeValue=n.nodeValue.replace(/(?:Disponível em:|Available at:)/g,current==='en-US'?'Available at:':'Disponível em:').replace(/(?:Acesso em:|Accessed:)/g,current==='en-US'?'Accessed:':'Acesso em:');}});
+ if(window.PlanoCRerender)window.PlanoCRerender();
+}
+document.addEventListener('DOMContentLoaded',function(){
+ initStatic();const select=document.getElementById('planocLanguage');
+ try{current=localStorage.getItem('planoc.language.v1')==='en-US'?'en-US':'pt-BR';}catch(e){}
+ if(select){select.value=current;select.addEventListener('change',function(){current=select.value==='en-US'?'en-US':'pt-BR';try{localStorage.setItem('planoc.language.v1',current);}catch(e){} apply();});}
+ apply();
+});
+window.PlanoCI18n={locale,translate};
+})();
+</script>
  <script>
   (() => {
    'use strict';
@@ -940,7 +1041,7 @@
    // ==========================================================
    function formatNumber(value, decimals) {
     if (!Number.isFinite(value)) return '–';
-    return value.toLocaleString('pt-BR', {
+    return value.toLocaleString((window.PlanoCI18n && window.PlanoCI18n.locale()) || 'pt-BR', {
      minimumFractionDigits: decimals,
      maximumFractionDigits: decimals
     });
@@ -974,7 +1075,7 @@
    }
 
    function showAlert(message) {
-    DOM.alertBox.textContent = message;
+    DOM.alertBox.textContent = window.PlanoCI18n ? window.PlanoCI18n.translate(message) : message;
     DOM.alertBox.style.display = 'block';
    }
 
@@ -1041,8 +1142,8 @@
 
    function setPrescription(prefix, text, highlight) {
     const textarea = DOM[prefix + 'PrescriptionText'];
-    const changed = textarea.value !== text;
-    textarea.value = text;
+    const changed = textarea.value !== (window.PlanoCI18n ? window.PlanoCI18n.translate(text) : text);
+    textarea.value = window.PlanoCI18n ? window.PlanoCI18n.translate(text) : text;
     resizePrescriptionTextarea(textarea);
     if (highlight && changed) highlightElement(textarea);
    }
@@ -1063,7 +1164,7 @@
     if (inputs.ageGroup !== 'lt1' && inputs.ageGroup !== 'ge1') errors.faixa = 'Selecione uma faixa etária válida.';
     Object.keys(errors).forEach(function (id) {
      DOM[id].setAttribute('aria-invalid', 'true');
-     DOM[id + 'Error'].textContent = errors[id];
+     DOM[id + 'Error'].textContent = window.PlanoCI18n ? window.PlanoCI18n.translate(errors[id]) : errors[id];
      DOM[id + 'Error'].hidden = false;
     });
     return Object.keys(errors)[0] || '';
@@ -1248,8 +1349,7 @@
     renderReplacement(result, inputs, highlight);
     renderTotals(result, inputs, highlight);
     const messages = buildMessages(result, inputs);
-    DOM.mensagens.innerHTML = messages;
-    if (messages.includes('class="warning"')) setCardExpanded('cardLeituraClinica', true);
+    DOM.mensagens.innerHTML = window.PlanoCI18n ? window.PlanoCI18n.translate(messages) : messages;
     UI_STATE.lastResult = result;
     refreshCopyButtons();
    }
@@ -1259,7 +1359,7 @@
    // ==========================================================
    function formatWeightInputValue(value) {
     if (!Number.isFinite(value)) return '';
-    return formatNumber(value, 3);
+    return value.toLocaleString('pt-BR', { minimumFractionDigits:3, maximumFractionDigits:3 });
    }
 
    function updateNormalizedField(element, rawValue, value, formatted, highlight) {
@@ -1315,6 +1415,7 @@
     UI_STATE.pendingFields = {};
     UI_STATE.replaceOnFirstEdit = {};
     UI_STATE.literalWeightInput = false;
+    UI_STATE.weightImplicitComma = false;
     Object.keys(UI_STATE.highlightTimers).forEach(function (id) { clearElementHighlight(document.getElementById(id)); });
     DOM.peso.value = '';
     DOM.faixa.value = '';
@@ -1334,17 +1435,40 @@
     UI_STATE.revision += 1;
     UI_STATE.pendingFields = {};
     UI_STATE.literalWeightInput = false;
+    UI_STATE.weightImplicitComma = false;
     clearCopyFeedback();
     handleCalculate();
    }
 
-   function sanitizeWeightInput(rawValue) {
-    const raw = String(rawValue || '');
-    const sign = raw.trim().startsWith('-') ? '-' : '';
-    const digits = raw.replace(/\D/g, '').slice(0, 6);
-    if (digits.length <= 1) return sign + digits;
-    if (digits.length <= 4) return sign + digits.charAt(0) + ',' + digits.slice(1);
-    return sign + digits.slice(0, -3) + ',' + digits.slice(-3);
+   function sanitizeWeightInput(rawValue, event) {
+    // Pediatric progressive input: 12 -> 12; 123 -> 12,3; 1234 -> 12,34.
+    // A manually typed comma or dot starts the fractional kilograms immediately.
+    const raw = String(rawValue == null ? '' : rawValue).replace(/\s+/g, '');
+    const explicit = UI_STATE.literalWeightInput || /[.,]/.test(raw) && !UI_STATE.weightImplicitComma;
+    const allDigits = raw.replace(/\D/g, '');
+    if (!allDigits) return '';
+    const leadingZeroSafe = allDigits.replace(/^0+(?=\d)/, '');
+    if (explicit && /[.,]/.test(raw)) {
+     const sep = raw.search(/[.,]/);
+     const integers = (raw.slice(0, sep).replace(/\D/g, '').replace(/^0+(?=\d)/,'') || '0').slice(0,3);
+     const fractions = raw.slice(sep+1).replace(/\D/g, '').slice(0,3);
+     return integers + ',' + fractions;
+    }
+    const digits = leadingZeroSafe.slice(0,6);
+    if (digits.length <= 2) return digits;
+    if (digits.length <= 5) return digits.slice(0,2) + ',' + digits.slice(2);
+    // Maximum pediatric weight can be typed as 100000 -> 100,000.
+    if (digits === '100000') return '100,000';
+    return digits.slice(0,3) + ',' + digits.slice(3);
+   }
+   function pediatricWeightCaret(text, raw, position) {
+    const before = raw.slice(0, Math.max(0, position));
+    const digitsBefore = (before.match(/\d/g) || []).length;
+    if (/[, .]$/.test(before) && text.includes(',')) return text.indexOf(',')+1;
+    if (!digitsBefore) return 0;
+    let count=0;
+    for(let i=0;i<text.length;i++){if(/\d/.test(text[i])) count++;if(count===digitsBefore)return i+1;}
+    return text.length;
    }
 
    function cancelResultNavigation() {
@@ -1387,13 +1511,25 @@
     clearValidationErrors();
     UI_STATE.pendingFields[id] = true;
     UI_STATE.revision += 1;
-    let value = element.value;
-    if (id === 'peso' && !UI_STATE.literalWeightInput) value = sanitizeWeightInput(value);
-    else if (!value.includes(',')) value = value.replace('.', ',');
-    if (id !== 'peso' && /^[,.]/.test(value)) value = '0,' + value.slice(1);
+    const originalValue = element.value;
+    const originalCaret = element.selectionStart == null ? originalValue.length : element.selectionStart;
+    let value = originalValue;
+    if (id === 'peso') {
+     const wasExplicit = UI_STATE.literalWeightInput;
+     // The inserted delimiter is an intentional decimal separator; an implicit
+     // delimiter introduced by the mask must not switch to explicit mode.
+     if (event && (event.data === ',' || event.data === '.')) UI_STATE.literalWeightInput = true;
+     if (/^insertFrom(?:Paste|Drop)$|^insertReplacementText$/.test(event.inputType || '')) UI_STATE.literalWeightInput = true;
+     value = sanitizeWeightInput(value, event);
+     UI_STATE.weightImplicitComma = !UI_STATE.literalWeightInput && value.includes(',');
+    } else {
+     if (!value.includes(',')) value = value.replace('.', ',');
+     if (/^[,.]/.test(value)) value = '0,' + value.slice(1);
+    }
     if (element.value !== value) {
      element.value = value;
-     element.setSelectionRange(value.length, value.length);
+     const caret = id === 'peso' ? pediatricWeightCaret(value, originalValue, originalCaret) : value.length;
+     element.setSelectionRange(caret,caret);
     }
     DOM.resultados.style.display = 'none';
     refreshCopyButtons();
@@ -1414,12 +1550,15 @@
     [DOM.peso, DOM.perdasExtras].forEach(function (element) {
      element.addEventListener('focus', function () {
       cancelResultNavigation();
-      UI_STATE.replaceOnFirstEdit[element.id] = element.value !== '';
-      if (element === DOM.peso) UI_STATE.literalWeightInput = false;
-      if (UI_STATE.replaceOnFirstEdit[element.id]) element.select();
+      UI_STATE.replaceOnFirstEdit[element.id] = element !== DOM.peso && element.value !== '';
+      if (element === DOM.peso) {
+       UI_STATE.literalWeightInput = false;
+       UI_STATE.weightImplicitComma = false;
+       // Não selecionar texto automaticamente ao focar no Android.
+      }
      });
      element.addEventListener('beforeinput', function (event) {
-      if (UI_STATE.replaceOnFirstEdit[element.id] && /^(insert|delete)/.test(event.inputType || '')) element.select();
+      // Substituição na primeira digitação é tratada por handleNumericInput.
      });
      element.addEventListener('paste', function (event) { handleNumericPaste(element, event); });
      element.addEventListener('input', function (event) { handleNumericInput(element, event); });
@@ -1430,7 +1569,8 @@
       event.preventDefault();
       const result = confirmNumericField(element);
       if (element === DOM.peso && DOM.peso.getAttribute('aria-invalid') !== 'true') {
-       DOM.perdasExtras.focus();
+       DOM.perdasExtras.focus({ preventScroll:true });
+       DOM.perdasExtras.scrollIntoView({behavior:'smooth',block:'nearest'});
       } else if (element === DOM.perdasExtras && result) {
        showExpansionResult();
       } else {
@@ -1439,6 +1579,7 @@
       }
      });
     });
+    DOM.faixa.addEventListener('keydown', function(event){if(event.key==='Enter'&&!event.isComposing){event.preventDefault();DOM.perdasExtras.focus({preventScroll:true});DOM.perdasExtras.scrollIntoView({behavior:'smooth',block:'nearest'});}});
     [DOM.faixa, DOM.especial, DOM.diurese].forEach(function (element) {
      element.addEventListener('focus', cancelResultNavigation);
      element.addEventListener('change', handleAutoRecalculate);
@@ -1457,7 +1598,7 @@
      if(!status)return;
      clearTimeout(UI_STATE.copyTimers[statusId]);
      clearTimeout(UI_STATE.copyClearTimers[statusId]);
-     status.textContent=message||'';
+     status.textContent=window.PlanoCI18n?window.PlanoCI18n.translate(message||''):(message||'');
      status.classList.toggle('show',Boolean(message));
      if(message){
       UI_STATE.copyTimers[statusId]=setTimeout(function(){
@@ -1513,19 +1654,26 @@
    // ==========================================================
    function init() {
     DOM.btnLimpar.addEventListener('click', handleReset);
+    document.getElementById('btnLimparRodape').addEventListener('click', function(){DOM.btnLimpar.click();});
+    document.getElementById('btnCalcularRodape').addEventListener('click', function(){
+     Object.keys(UI_STATE.pendingFields).forEach(function(id){ if(DOM[id]) confirmNumericField(DOM[id]); });
+     const result = handleCalculate();
+     if(result) showExpansionResult();
+    });
     bindAutoRecalculation();
     bindMinimizableCards();
     bindPrescriptionCopy('expansionCopyPrescription', 'expansionPrescriptionText', 'expansionCopyStatus');
     bindPrescriptionCopy('maintenanceCopyPrescription', 'maintenancePrescriptionText', 'maintenanceCopyStatus');
     bindPrescriptionCopy('replacementCopyPrescription', 'replacementPrescriptionText', 'replacementCopyStatus');
     bindPrescriptionCopy('dailyInitialCopyPrescription', 'dailyInitialPrescriptionText', 'dailyInitialCopyStatus');
-    DOM.faixa.tabIndex = -1;
+    DOM.faixa.tabIndex = 0;
     window.addEventListener('resize', resizePrescriptionTextareas);
     handleCalculate({ initial: true });
     DOM.peso.focus({ preventScroll: true });
    }
 
    window.HydrationPlanCCore = HydrationPlanCCore;
+   window.PlanoCRerender = function() { if (!hasPendingInput()) handleCalculate({initial:true}); };
 
    // Android WebView: estado persistente mínimo, isolado da lógica clínica.
    const APP_STATE_SCHEMA_VERSION = 1;
@@ -1537,8 +1685,7 @@
     }));
     return { schema: APP_STATE_SCHEMA_VERSION, peso: DOM.peso.value,
      faixa: DOM.faixa.value, perdasExtras: DOM.perdasExtras.value,
-     especial: DOM.especial.checked, diurese: DOM.diurese.checked, cards: cards,
-     scrollY: Math.max(0, Math.round(window.scrollY || 0)) };
+     especial: DOM.especial.checked, diurese: DOM.diurese.checked, cards: cards };
    }
    function saveUserState() {
     window.clearTimeout(stateSaveTimer);
@@ -1561,15 +1708,14 @@
     if (typeof saved.diurese === 'boolean') DOM.diurese.checked = saved.diurese;
     if (Array.isArray(saved.cards)) saved.cards.forEach(function (entry) {
      if (!entry || typeof entry.id !== 'string') return;
+     if (entry.id === 'cardLeituraClinica') return; // Iniciar minimizada, independentemente do estado salvo.
      const card = document.getElementById(entry.id);
      if (card && card.classList.contains('card-minimizable') && typeof entry.expanded === 'boolean') {
       setCardExpanded(entry.id, entry.expanded);
      }
     });
     handleCalculate({ initial: true });
-    if (Number.isFinite(saved.scrollY) && saved.scrollY > 0) {
-     window.setTimeout(function () { window.scrollTo(0, saved.scrollY); }, 180);
-    }
+
    }
    function bindPersistentUserState() {
     restoreUserState();
@@ -1600,5 +1746,5 @@
   })();
  </script>
 
-</body>
+<script>document.querySelectorAll('.planoc-top-arrow').forEach(function(button){button.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});});</script></body>
 </html>
